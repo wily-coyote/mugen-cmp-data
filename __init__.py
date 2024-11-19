@@ -1,7 +1,7 @@
 import json, sublime, os.path
 
 def getpath(bah):
-	return os.path.join(sublime.packages_path(), "MUGEN", "utils", bah)
+	return os.path.join(sublime.packages_path(), "MUGEN", "utils", "data", bah)
 
 def safeget(list, index):
 	if index >= len(list):
