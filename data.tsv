@@ -3040,7 +3040,7 @@ docbgn
 Allows checking the length, loopstart, loopend, position, startposition, volume, and filename of the currently playing BGM.
 docend
 
-trigger	BotBoundDist ikgo
+trigger	BotBoundDist	ikgo
 fmt	BotBoundDist
 docbgn
 BotBoundDist gives the distance between the player's z-axis and the BotBound value of the stage.
@@ -3688,7 +3688,7 @@ docbgn
 Returns the total number of clock ticks that have elapsed so far. Takes into account previous rounds and matches since the start of this game mode.
 docend
 
-trigger	TopBoundDist ikgo
+trigger	TopBoundDist	ikgo
 fmt	TopBoundDist
 docbgn
 TopBoundDist gives the distance between the player's z-axis and the TopBound value of the stage.
