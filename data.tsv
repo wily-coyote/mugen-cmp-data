@@ -1,0 +1,3708 @@
+sctrl	AfterImage
+opt	time	0
+opt	length	0
+opt	palcolor	0
+opt	palinvertall	0
+opt	palbright	0
+opt	palcontrast	0
+opt	palpostbright	0
+opt	paladd	0
+opt	palmul	0.0
+opt	timegap	0
+opt	framegap	0
+opt	trans	string
+opt	PalInvertBlend	0
+docbgn
+Enables player afterimage effects. The character's frames are stored in a history buffer, and are displayed after a delay as afterimages.
+docend
+
+sctrl	AfterImageTime
+req	time	0
+req	value	0
+docbgn
+Changes the duration of the player's afterimage effects, if currently enabled. If no afterimage effects are being displayed, this controller does nothing.
+Known bugs: If the timegap parameter in the originating AfterImage controller is not set at 1, using this AfterImageTime will cause the frame positions to be reset.
+docend
+
+sctrl	AllPalFX
+opt	time	0
+opt	add	0	0	0
+opt	mul	0	0	0
+opt	sinadd	0	0	0	0
+opt	invertall	0
+opt	color	0
+opt	InvertBlend	0
+docbgn
+Same as PalFX, except that this affects the palette of the background and lifebars as well as the palette of all characters and explods (regardless of the ownpal parameter). See the PalFX section for details on the parameters to AllPalFX.
+docend
+
+sctrl	AngleAdd
+req	value	0.0
+docbgn
+Adds to the drawing rotation angle used by AngleDraw.
+docend
+
+sctrl	AngleDraw
+opt	value	0.0
+opt	scale	0.0	0.0
+opt	RescaleClsn	0
+opt	RotateClsn	0
+docbgn
+Draws the player (for 1 frame) rotated about his axis by the angle set by the AngleSet controller. When facing right, a positive angle means a counterclockwise rotation.
+Rotation/scaling does not affect the player's collision boxes.
+docend
+
+sctrl	AngleMul
+req	value	0.0
+docbgn
+Multiplies the drawing rotation angle used by AngleDraw by the specified factor.
+docend
+
+sctrl	AngleSet
+req	value	0.0
+docbgn
+Sets the drawing rotation angle used by AngleDraw. The angle is initialized at 0.
+docend
+
+sctrl	AppendToClipboard
+req	text	string
+opt	params	exp	exp	exp	exp	exp	exp
+docbgn
+This is the same as DisplayToClipboard, except that message text is added on a new line, instead of overwriting whatever text is already on the clipboard. See DisplayToClipboard for a format description.
+
+In Ikemen-GO, params can take an unlimited amount of numeric arguments.
+In addition, text also supports Go-style format specifiers such as %0.2f and %v.
+docend
+
+sctrl	AssertSpecial
+req	flag	string
+opt	flag2	string
+opt	flag3	string
+docbgn
+This controller allows you to assert up to three special flags simultaneously. MUGEN will automatically "deassert" each flag at every game tick, so you must assert a flag for each tick that you want it to be active.
+
+The flag name can be one of the following:
+
+intro
+Tells MUGEN that the character is currently performing his intro pose. Must be
+asserted on every tick while the intro pose is being performed.
+
+invisible
+Turns the character invisible while asserted. Does not affect display of
+afterimages.
+
+roundnotover
+Tells MUGEN that the character is currently performing his win pose. Should be
+asserted on every tick while the win pose is being performed.
+
+nobardisplay
+Disables display of life, super bars, etc. while asserted.
+
+noBG
+Turns off the background. The screen is cleared to black.
+
+noFG
+Disables display of layer 1 of the stage (the foreground).
+
+nostandguard
+While asserted, disables standing guard for the character.
+
+nocrouchguard
+While asserted, disables crouching guard for the character.
+
+noairguard
+While asserted, disables air guard for the character.
+
+noautoturn
+While asserted, keeps the character from automatically turning
+to face the opponent.
+
+nojugglecheck
+While asserted, disables juggle checking. P2 can be juggled
+regardless of juggle points.
+
+nokosnd
+Suppresses playback of sound 11, 0 (the KO sound) for players
+who are knocked out. For players whose KO sound echoes, nokosnd
+must be asserted for 50 or more ticks after the player is KOed
+in order to suppress all echoes.
+
+nokoslow
+While asserted, keeps MUGEN from showing the end of the round in slow motion.
+
+noshadow
+While asserted, disables display of this player's shadows.
+
+globalnoshadow
+Disables display of all player, helper and explod shadows.
+
+nomusic
+While asserted, pauses playback of background music.
+
+nowalk
+While asserted, the player cannot enter his walk states, even if he has
+control. Use to prevent run states from canceling into walking.
+
+timerfreeze
+While asserted, keeps the round timer from counting down. Useful to keep the
+round from timing over in the middle of a splash screen.
+
+unguardable
+While asserted, all the asserting player's HitDefs become unblockable, i.e.,
+their guardflags are ignored.
+
+In Ikemen-GO, AssertSpecial has new flag names:
+
+AnimateHitpause (nightly build only)
+While asserted, this flag makes the player's animation advance normally even during a hitpause.
+
+AnimFreeze
+While asserted, the player's animation will be frozen on the current frame.
+
+AutoGuard
+While asserted, makes the player guard automatically, without need to press back direction. The player will also switch automatically between standing and crouching guard.
+
+DrawUnder (nightly build only)
+While asserted, makes the player sprites be drawn with the same properties of Explod under parameter. That is, if the player is on layer 0, it will always be drawn behind lifebars and character shadows.
+
+GlobalNoKo
+While asserted all players won't die from taking damage.
+
+NoAiLevel
+While asserted, makes the player AILevel and AILevelF triggers return 0
+
+NoAirJump
+Disables the hard-coded state transitions to State 45 when Ctrl=1 && StateType=A && Command="holdup" and AirJump.Num allows
+
+NoBrake
+Disables the hard-coded state transitions to State 0 when StateNo=20 && Command!="holdfwd" && Command!="holdback"
+
+NoCrouch
+Disables the hard-coded state transitions to State 10 when Ctrl=1 && StateType=S && Command="holddown".
+
+NoDizzyPointsDamage
+While asserted, player won't be affected by a HitDef's dizzypoints parameter.
+
+NoFastRecoverFromLieDown
+Disables the hard-coded faster recover from lie down on key input mashing when StateType=L && GetHitVar(RecoverTime)>0.
+
+NoFallCount
+Disables the hard-coded FallCount increment when StateNo=5070 || StateNo=5100.
+
+NoFallDefenceUp
+Disables the hard-coded defence increase when StateNo=5070 || StateNo=5100.
+
+NoFallHitflag (nightly build only)
+While asserted, every HitDef will act as if its HitFlag has no F parameter. In other words, the player becomes unable to hit falling enemies.
+
+NoGetUpFromLieDown
+Disables the hard-coded state transitions to State 5120 when StateNo=5110 && GetHitVar(RecoverTime)=0.
+
+NoGuardKo
+While asserted player won't die from taking chip damage.
+
+NoGuardDamage
+While asserted, player won't be affected by HitDef damage guard_damage.
+
+NoGuardPointsDamage
+While asserted, player won't be affected by HitDef guardpoints.
+
+NoFightDisplay (nightly build only)
+While asserted, the "fight" announcement on round start will be skipped.
+
+NoHardcodedKeys
+Disables the hard-coded state transitions when pressing directional keys (combination of NoJump, NoAirJump, NoCrouch, NoStand, NoWalk, NoBrake, NoStandGuard, NoCrouchGuard, NoAirGuard).
+
+NoHitDamage
+While asserted, player won't be affected by HitDef damage hit_damage.
+
+NoInput
+While asserted, makes the player ignore any player/CPU inputs.
+
+NoIntroReset
+While asserted, prevents a player from being forced to their starting position after the round number announcement.
+
+NoJump
+Disables the hard-coded state transitions to State 40 when Ctrl=1 && StateType=S && Command="holdup"
+
+NoKo
+While asserted, the player won't die from taking damage.
+If ikemenversion is not 0, the NoKO flag affects only the player that called it. Otherwise, the MUGEN behavior is replicated, and all players are affected. The new GlobalNoKo flag can be used to replicate the old MUGEN behavior.
+
+NoKoDisplay (nightly build only)
+While asserted, the KO announcement on round end will be skipped.
+
+NoKoVelocity
+While asserted, player won't be affected by HitDef velocity adjustments upon KO.
+
+NoMakeDust
+While asserted, the player does not generate hardcoded dust effects. The MakeDust state controller will also have no effect.
+
+NoPowerBarDisplay
+While asserted, disables displaying powerbars by this playerno (with team power share option enabled and/or lifebar design with only 1 powerbar per side, the flag has to be asserted on team leader to disable powerbar rendering for whole team).
+
+NoRedLifeDamage (nightly build only)
+While asserted, player won't be affected by HitDef redlife.
+
+NoRoundDisplay (nightly build only)
+While asserted, the round number announcement on round start will be skipped.
+
+NoStand
+Disables the hard-coded state transitions to State 12 when StateType=C && Command!="holddown".
+
+NoTurnTarget
+While asserted, keeps the opponent from automatically turning to face the player.
+
+NoWinDisplay (nightly build only)
+While asserted, the winner announcement on round end will be skipped.
+
+PostRoundInput
+While asserted, player's inputs are not disabled post-match (RoundState>2 || RoundState=-1).
+
+ProjTypeCollision (nightly build only)
+While asserted, the player will clash with projectiles (and other players with the same flag) if their Clsn2 boxes overlap. This allows helpers to easily replicate this kind of projectile clashing.
+
+RoundFreeze
+While asserted, round related lifebar actions and internal timers are frozen (allows maintaining current roundstate).
+
+RoundNotSkip
+Disables intro and victory pose skipping via button press.
+
+RunFirst (nightly build only)
+While asserted, makes the player code be processed before that of any other players.
+
+RunLast (nightly build only)
+While asserted, makes the player code be processed after all other players.
+
+SizePushOnly (nightly build only)
+In Ikemen, like Mugen, characters will push each other when both their size boxes (width * height) and their Clsn2 boxes overlap. Asserting this flag makes it so that only the size boxes are checked, as in most fighting games.
+docend
+
+sctrl	AttackDist
+req	value	0
+docbgn
+Changes the value of the guard.dist parameter for the player's current HitDef. The guard.dist is the x-distance from P1 in which P2 will go
+into a guard state if P2 is holding the direction away from P1.
+The effect of guard.dist only takes effect when P1 has movetype = A.
+
+In Ikemen-GO, value takes a second number. This number sets the distance that a player can attack behind the enemy and still allow them to enter proximity guard.
+docend
+
+sctrl	AttackMulSet
+req	value	0.0
+opt	Damage	0.0
+opt	DizzyPoints	0.0
+opt	GuardPoints	0.0
+opt	RedLife	0.0
+docbgn
+Sets the player's attack multiplier. All damage the player gives is scaled by this amount.
+docend
+
+sctrl	BGPalFX
+opt	time	0
+opt	add	0	0	0
+opt	mul	0	0	0
+opt	sinadd	0	0	0	0
+opt	invertall	0
+opt	color	0
+docbgn
+Same as PalFX, except that this affects the palette of the background and lifebars instead of the palette of the character. See the PalFX section for details on the parameters to BGPalFX.
+docend
+
+sctrl	BindToParent
+opt	time	0
+opt	facing	0
+opt	pos	0.0	0.0
+docbgn
+If the player is a helper, binds the player to a specified position relative to its parent. If the player is not a helper, this controller does nothing.
+If the player's parent is destroyed (for example, if it is a
+helper, and executes DestroySelf), then the effect of
+BindToParent is terminated.
+docend
+
+sctrl	BindToRoot
+opt	time	0
+opt	facing	0
+opt	pos	0.0	0.0
+docbgn
+If the player is a helper, binds the player to a specified position relative to its root. If the player is not a helper, this controller does nothing.
+If the player's root is disabled for any reason, then the effect of
+BindToRoot is terminated.
+docend
+
+sctrl	BindToTarget
+opt	time	0
+opt	ID	0
+opt	pos	0.0	0.0	string
+docbgn
+Binds the player to a specified position relative to the specified target.
+docend
+
+sctrl	ChangeAnim
+req	value	0
+opt	elem	0
+opt	ReadPlayerID	0
+docbgn
+Changes the action number of the player's animation.
+In Ikemen-GO, ReadPlayerID lets a character use the specified animation from another character, including their sprites.
+docend
+
+sctrl	ChangeAnim2
+req	value	0
+opt	elem	0
+opt	ReadPlayerID	0
+docbgn
+Like ChangeAnim, except this controller should be used if you have placed P2 in a custom state via a hit and wish to change P2's animation to one specified in P1's air file. For example, when making throws, use this to change P2 to a being-thrown animation.
+In Ikemen-GO, ReadPlayerID lets a character use the specified animation from another character, but maintaining their own sprites.
+docend
+
+sctrl	ChangeState
+req	value	0
+opt	ctrl	0
+opt	anim	0
+opt	Continue	0
+docbgn
+Changes the state number of the player.
+In Ikemen-GO, if a ChangeState is called in State -1, Continue will continue the execution of the current state, even after the state has changed.
+docend
+
+sctrl	ClearClipboard
+docbgn
+Erases any text currently on the player's clipboard.
+docend
+
+sctrl	CtrlSet
+req	value	0
+docbgn
+Sets the player's control flag.
+docend
+
+sctrl	DefenceMulSet
+req	value	0.0
+opt	MulType	0
+opt	OnHit	0
+docbgn
+Sets the player's defense multiplier. All damage the player takes is scaled by this amount.
+The LifeAdd controller is not affected by the player's defense multiplier.
+docend
+
+sctrl	DestroySelf
+opt	recursive	0
+opt	removeexplods	0
+docbgn
+If called by a helper-type character, DestroySelf causes that character to be removed from the field of play. DestroySelf is not valid for non-helper characters.
+Any players or explods bound to the helper will be forcefully unbound when DestroySelf
+is executed.
+Any unremoved explods belonging to a destroyed helper will become orphaned.
+docend
+
+sctrl	DisplayToClipboard
+req	text	string
+opt	params	exp	exp	exp	exp	exp	exp
+docbgn
+This controller is only useful for debugging. DisplayToClipboard clears the player clipboard and prints a specified message to it. Display of the player clipboards is enabled in debug mode (press Ctrl+D).
+
+In Ikemen-GO, params can take an unlimited amount of numeric arguments.
+In addition, text also supports Go-style format specifiers such as %0.2f and %v.
+docend
+
+sctrl	EnvColor
+opt	value	0
+opt	time	0
+opt	under	0
+docbgn
+Turns the whole screen a solid color, excepting foreground-layer animations like hit sparks and "ontop" explods. Foreground layers of the stage will not be visible.
+docend
+
+sctrl	EnvShake
+req	time	0
+opt	freq	0.0
+opt	ampl	0
+opt	phase	0.0
+opt	Mul	0.0
+docbgn
+Causes the screen to shake vertically.
+docend
+
+sctrl	Explod
+req	anim	0
+opt	ID	0
+opt	space	string
+opt	pos	0.0	0.0
+opt	facing	0
+opt	vfacing	0
+opt	bindID	0
+opt	bindtime	0
+opt	vel	0.0	0.0
+opt	accel	0.0	0.0
+opt	removetime	0
+opt	supermovetime	0
+opt	pausemovetime	0
+opt	scale	0.0	0.0
+opt	angle	0.0
+opt	yangle	0.0
+opt	xangle	0.0
+opt	sprpriority	0
+opt	ontop	0
+opt	shadow	0
+opt	ownpal	0
+opt	remappal	0	0
+opt	removeongethit	0
+opt	ignorehitpause	0
+opt	trans	string
+opt	postype	string
+opt	random	0	0
+opt	supermove	0
+opt	space	string
+opt	AnimElem	1
+opt	AnimFreeze	0
+opt	FocalLength	2048.0
+opt	Interpolation.Time	0
+opt	Interpolation.AnimElem	1
+opt	Interpolation.Alpha 256	0
+opt	Interpolation.Angle 0.0	0.0	0.0
+opt	Interpolation.Offset 0.0	0.0
+opt	Interpolation.Scale 1.0	1.0
+opt	Interpolation.FocalLength 2048.0
+opt	Interpolation.PalFX.time	0
+opt	Interpolation.PalFX.add	0	0	0
+opt	Interpolation.PalFX.mul	0	0	0
+opt	Interpolation.PalFX.sinadd	0	0	0	0
+opt	Interpolation.PalFX.invertall	0
+opt	Interpolation.PalFX.color	0
+opt	LayerNo	0
+opt	PalFX.time	0
+opt	PalFX.add	0	0	0
+opt	PalFX.mul	0	0	0
+opt	PalFX.sinadd	0	0	0	0
+opt	PalFX.invertall	0
+opt	PalFX.color	0
+opt	Projection	string
+opt	RemoveOnChangeState	0
+opt	Under	0
+opt	Window	0	0	0	0
+docbgn
+The Explod controller is a flexible tool for displaying animations such as sparks, dust and other visual effects. Its functionality includes that of GameMakeAnim, which is now deprecated.
+The position of an explod that is bound to a player is determined only after
+all player updates have completed (compared to helpers, which are created
+relative to the player's immediate position when the controller was executed).
+This behavior is necessary to make explods bind properly to the player's
+screen position.
+For example, assume the player has an x velocity of 5 and a position of (160,0).
+If an explod is created with an offset of 0,0 relative to p1, then the explod's
+actual screen position will be 165,0.
+docend
+
+sctrl	ExplodBindTime
+opt	ID	0
+opt	time	0
+opt	value	0
+docbgn
+Changes the position binding time of the player's explods.
+docend
+
+sctrl	ForceFeedback
+opt	waveform	string
+opt	time	0
+opt	freq	0	0.0	0.0	0.0
+opt	ampl	0	0.0	0.0	0.0
+opt	self	0
+docbgn
+Creates force feedback for supported force feedback devices.This controller is not implemented in MUGEN 1.0.
+Parameters to the ForceFeedback controller may not be specified using arithmetic expressions. It is an exception in this regard.
+docend
+
+sctrl	FallEnvShake
+docbgn
+Shakes the screen using the fall.envshake parameters set by an attack (see HitDef controller). This controller is effective only if GetHitVar(fall.envshake.time) is not zero, and it sets GetHitVar(fall.envshake.time) to zero after being executed. This controller is used in common1.cns to shake the screen when a player falls, and is not normally useful otherwise.
+docend
+
+sctrl	GameMakeAnim
+opt	value	0
+opt	under	0
+opt	pos	0.0
+opt	random	0
+docbgn
+Creates a game animation, like a hit spark or a super charging effect. This controller has been superseded by Explod and is now considered deprecated. Support for it may be removed in future versions.
+docend
+
+sctrl	Gravity
+docbgn
+Accelerates the player downwards, using the value of the player's "yaccel" constant.
+docend
+
+sctrl	Helper
+opt	helpertype	string
+opt	name	string
+opt	ID	0
+opt	pos	0.0
+opt	postype	string
+opt	facing	0
+opt	stateno	0
+opt	keyctrl	0
+opt	ownpal	0
+opt	remappal	0	0
+opt	supermovetime	0
+opt	pausemovetime	0
+opt	size.xscale	0.0
+opt	size.yscale	0.0
+opt	size.ground.back	0
+opt	size.ground.front	0
+opt	size.air.back	0
+opt	size.air.front	0
+opt	size.height	0
+opt	size.proj.doscale	0
+opt	size.head.pos	0	0
+opt	size.mid.pos	0	0
+opt	size.shadowoffset	0
+opt	ExtendsMap	0
+opt	Immortal	0
+opt	InheritChannels	0
+opt	InheritJuggle	0
+opt	KOVelocity	0
+opt	OwnClsnScale	0
+opt	Preserve	0
+opt	Standby	0
+docbgn
+Creates another instance of the player as a helper character.
+In Ikemen-GO, keyctrl accepts extra values that enables the Helper to inherit from other negative states.
+docend
+
+sctrl	HitAdd
+req	value	0
+docbgn
+Adds to the current combo counter.
+docend
+
+sctrl	HitBy
+req	value	string
+opt	time	0
+opt	Attr	0
+opt	Slot	0
+opt	Stack	0
+opt	PlayerNo	0
+opt	PlayerID	0
+docbgn
+Temporarily specifies the types of hits that are be allowed hit to the player.
+The player has two hit attribute slots, which can be set using the
+value or value2 parameters to the HitBy controller. These slots can
+also be set by the NotHitBy controller. When a slot is set, it gets
+a timer (the effective time) which counts down toward zero. If the
+timer has not yet reached zero, the slot is considered to be active.
+The player can be hit by a HitDef only if that HitDef's attribute
+appears in all currently active slots.
+Using the HitBy controller sets the specified slot to contain only
+those hit attributes which appear in the HitBy attribute string.
+
+In Ikemen-GO, this controller accepts the same syntax as HitOverride.
+docend
+
+sctrl	HitDef
+req	attr	string
+opt	hitflag	string
+opt	guardflag	string
+opt	affectteam	string
+opt	animtype	string
+opt	air.animtype	string
+opt	fall.animtype	string
+opt	priority	0	string
+opt	damage	0	0
+opt	pausetime	0	0
+opt	guard.pausetime	0	0
+opt	sparkno	0
+opt	guard.sparkno	0
+opt	sparkxy	0	0
+opt	hitsound	0	0
+opt	guardsound	0	0
+opt	ground.type	string
+opt	air.type	string
+opt	ground.slidetime	0
+opt	guard.slidetime	0
+opt	ground.hittime	0
+opt	guard.hittime	0
+opt	air.hittime	0
+opt	guard.ctrltime	0
+opt	guard.dist	0
+opt	yaccel	0.0
+opt	ground.velocity	0.0	0.0
+opt	guard.velocity	0.0
+opt	air.velocity	0.0	0.0
+opt	airguard.velocity	0.0	0.0
+opt	ground.cornerpush.veloff	0.0
+opt	air.cornerpush.veloff	0.0
+opt	down.cornerpush.veloff	0.0
+opt	guard.cornerpush.veloff	0.0
+opt	airguard.cornerpush.veloff	0.0
+opt	airguard.ctrltime	0
+opt	air.juggle	0
+opt	mindist	0	0
+opt	maxdist	0	0
+opt	snap	0	0
+opt	p1sprpriority	0
+opt	p2sprpriority	0
+opt	p1facing	0
+opt	p1getp2facing	0
+opt	p2facing	0
+opt	p1stateno	0
+opt	p2stateno	0
+opt	p2getp1state	0
+opt	forcestand	0
+opt	fall	0
+opt	fall.xvelocity	0.0
+opt	fall.yvelocity	0.0
+opt	fall.recover	0
+opt	fall.recovertime	0
+opt	fall.damage	0
+opt	air.fall	0
+opt	forcenofall	0
+opt	down.velocity	0.0	0.0
+opt	down.hittime	0
+opt	down.bounce	0
+opt	id	0
+opt	chainID	0
+opt	nochainID	0
+opt	hitonce	0
+opt	kill	0
+opt	guard.kill	0
+opt	fall.kill	0
+opt	numhits	0
+opt	getpower	0	0
+opt	givepower	0	0
+opt	palfx.time	0
+opt	palfx.mul	0	0	0
+opt	palfx.add	0	0	0
+opt	envshake.time	0
+opt	envshake.freq	0.0
+opt	envshake.ampl	0
+opt	envshake.phase	0.0
+opt	fall.envshake.time	0
+opt	fall.envshake.freq	0.0
+opt	fall.envshake.ampl	0
+opt	fall.envshake.phase	0.0
+opt	Attack.Depth	0
+opt	DizzyPoints	0
+opt	Down.Recover	0
+opt	Down.RecoverTime	0
+opt	EnvShake.Mul	0
+opt	Fall.EnvShake.Mul	0
+opt	ForceCrouch	0
+opt	GuardPoints	0
+opt	Guard.SparkAngle	0
+opt	GuardSound.Channel	0
+opt	HitSound.Channel	0
+opt	P2ClsnCheck	0
+opt	P2ClsnRequire	0
+opt	RedLife	0
+opt	Score	0
+opt	SparkAngle	0
+opt	TeamSide	0
+opt	XAccel	0
+docbgn
+Defines a single hit of the player's attack. If the player's Clsn1 box (red) comes in contact with his opponent's Clsn2 box (blue), and the HitDef was define on or before that particular point in time, then the specified effect will be applied. This is one of the more complex, but most commonly-used controllers.
+A single HitDef is valid only for a single hit. To make a move hit several times, you must trigger more than one HitDef during the attack.
+The behavior of HitDef is undefined when executed from a
+[Statedef -2] block while the player has another player's
+state and animation data.
+docend
+
+sctrl	HitFallDamage
+docbgn
+When the player has been hit and is in a falling state, apply damage
+from the fall (specified in the hitdef) to the player.
+docend
+
+sctrl	HitFallSet
+opt	value	0
+opt	xvel	0.0
+opt	yvel	0.0
+docbgn
+When the player has been hit, sets the player's fall variables.
+docend
+
+sctrl	HitFallVel
+docbgn
+If the player has been hit and is in a falling state, sets the player's velocities to the fall velocities (fall.xvel and fall.yvel) specified in the HitDef.
+docend
+
+sctrl	HitOverride
+req	attr	string
+req	stateno	0
+opt	slot	0
+opt	time	0
+opt	forceair	0
+docbgn
+Defines a hit override. If the player is hit by an attack of the specified type, he will go to the specified state number instead of his default gethit behavior. Up to 8 hit overrides can be active at one time.
+If P1 has one or more active HitOverrides, P1 will not be affected by any
+of P2's matching HitDefs that have any of the following characteristics:
+
+p1stateno parameter value is not -1
+p2getp1state parameter value is 1
+docend
+
+sctrl	HitVelSet
+opt	x	0
+opt	y	0
+docbgn
+This controller is deprecated.
+When the player has been hit, sets the desired components of the player's velocity to the appropriate gethit velocities.
+Obsolete.
+docend
+
+sctrl	LifeAdd
+req	value	0
+opt	kill	0
+opt	absolute	0
+docbgn
+Adds the specified amount to the player's life, scaled by the player's defense multiplier if necessary.
+docend
+
+sctrl	LifeSet
+req	value	0
+docbgn
+Sets the player's life to the specified value.
+docend
+
+sctrl	MakeDust
+opt	pos	0
+opt	pos2	0.0
+opt	spacing	0
+docbgn
+This controller is deprecated; use the Explod controller.
+Creates dust effects.
+docend
+
+sctrl	ModifyExplod
+req	anim	0
+opt	ID	0
+opt	space	string
+opt	pos	0.0	0.0
+opt	facing	0
+opt	vfacing	0
+opt	bindID	0
+opt	bindtime	0
+opt	vel	0.0	0.0
+opt	accel	0.0	0.0
+opt	removetime	0
+opt	supermovetime	0
+opt	pausemovetime	0
+opt	scale	0.0	0.0
+opt	angle	0.0
+opt	yangle	0.0
+opt	xangle	0.0
+opt	sprpriority	0
+opt	ontop	0
+opt	shadow	0
+opt	ownpal	0
+opt	remappal	0	0
+opt	removeongethit	0
+opt	ignorehitpause	0
+opt	trans	string
+opt	postype	string
+opt	random	0	0
+opt	supermove	0
+opt	space	string
+opt	AnimElem	1
+opt	AnimFreeze	0
+opt	FocalLength	2048.0
+opt	Interpolation.Time	0
+opt	Interpolation.AnimElem	1
+opt	Interpolation.Alpha 256	0
+opt	Interpolation.Angle 0.0	0.0	0.0
+opt	Interpolation.Offset 0.0	0.0
+opt	Interpolation.Scale 1.0	1.0
+opt	Interpolation.FocalLength 2048.0
+opt	Interpolation.PalFX.time	0
+opt	Interpolation.PalFX.add	0	0	0
+opt	Interpolation.PalFX.mul	0	0	0
+opt	Interpolation.PalFX.sinadd	0	0	0	0
+opt	Interpolation.PalFX.invertall	0
+opt	Interpolation.PalFX.color	0
+opt	LayerNo	0
+opt	PalFX.time	0
+opt	PalFX.add	0	0	0
+opt	PalFX.mul	0	0	0
+opt	PalFX.sinadd	0	0	0	0
+opt	PalFX.invertall	0
+opt	PalFX.color	0
+opt	Projection	string
+opt	RemoveOnChangeState	0
+opt	Under	0
+opt	Window	0	0	0	0
+docbgn
+Modifies the parameters of an existing Explod. Syntax is basically
+the same as Explod. However, this controller is subject to future
+change. Any code relying on this controller is not guaranteed to
+work in the future.
+docend
+
+sctrl	MoveHitReset
+docbgn
+Resets the movehit flag to 0. That is, after executing MoveHitReset, the triggers MoveContact, MoveGuarded, and MoveHit will all return 0.
+docend
+
+sctrl	NotHitBy
+req	value	string
+opt	time	0
+opt	Attr	0
+opt	Slot	0
+opt	Stack	0
+opt	PlayerNo	0
+opt	PlayerID	0
+docbgn
+Temporarily specifies types of hits that are not allowed to hit the player.
+The player has two hit attribute slots, which can be set using the
+"value" or "value2" parameters to the NotHitBy controller. These
+slots can also be set by the HitBy controller. When a slot is set,
+it gets a timer (the effective time) which counts down toward zero.
+If the timer has not yet reached zero, the slot is considered to be
+active. The player can be hit by a HitDef only if that HitDef's
+attribute appears in all currently active slots.
+Using the NotHitBy controller sets the specified slot to contain all
+hit attributes except those specified in the NotHitBy attribute
+string.
+
+In Ikemen-GO, this controller accepts the same syntax as HitOverride.
+docend
+
+sctrl	Null
+docbgn
+Does nothing. May be used for disabling other state controllers by changing their type to Null.
+Any triggers associated with the controller will still be evaluated.
+docend
+
+sctrl	Offset
+opt	x	0.0
+opt	y	0.0
+docbgn
+Changes the player's display offset. The player is drawn shifted from his axis by this amount.
+docend
+
+sctrl	PalFX
+opt	time	0
+opt	add	0	0	0
+opt	mul	0	0	0
+opt	sinadd	0	0	0	0
+opt	invertall	0
+opt	color	0
+opt	InvertBlend	0
+opt	Hue	0
+opt	SinMul	0
+opt	SinColor	0
+opt	SinHue	0
+docbgn
+Applies temporary effects the player's palette. These will also affect the palette of any explods and helpers the player owns, unless they have set ownpal to a nonzero value.
+docend
+
+sctrl	ParentVarAdd
+req	v	0
+req	fv	0
+req	value	0
+opt	var($var_no)	0
+opt	fvar($var_no)	0.0
+docbgn
+If the player is a helper, adds to one of the player's parent's working variables. Either a float variable or an int variable can be added to by this controller. If the player is not a helper, this controller does nothing.
+Due to historical reasons, note that the alternate VarAdd
+syntax listed above matches neither the syntax for variable
+assignment within an expression, nor the syntax for variable
+addition within an expression.
+If you have placed P2 in a custom state through a successful hit, do
+not use variable assignment within the custom states. Otherwise, you
+will overwrite P2's parent's variables, which can cause unintended
+malfunction of the opponent player.
+Warning: System variables (sysvar, sysfvar) cannot be used within this controller.
+docend
+
+sctrl	ParentVarSet
+req	v	0
+req	fv	0
+req	value	0
+opt	var($var_no)	0
+opt	fvar($var_no)	0.0
+docbgn
+If the player is a helper, sets one of the parent's working variables. Either a float variable or an int variable can be set by this controller. Does nothing if the player is not a helper.
+Due to historical reasons, note that the alternate variable
+assignment syntax listed above does not exactly match the syntax for
+variable assignment within an expression.
+If you have placed P2 in a custom state through a successful hit, do
+not use variable assignment within the custom states. Otherwise, you
+will overwrite P2's parent's variables, which can cause unintended
+malfunction of the opponent player.
+Warning: System variables (sysvar, sysfvar) cannot be used within this controller.
+docend
+
+sctrl	Pause
+req	time	0
+opt	endcmdbuftime	0
+opt	movetime	0
+opt	pausebg	0
+docbgn
+Pauses the game for the specified amount of time. Player and background updates are not carried out during this time.
+Executing a Pause controller during the pausetime of another
+will cancel out the effect of the previous Pause controller.
+Executing a Pause during a superpause will delay the effects
+of the pause until after the superpause has ended.
+docend
+
+sctrl	PlayerPush
+req	value	0
+opt	Priority	0
+docbgn
+Disables the player's push checking for one tick. Push checking keeps players from overlapping one another. By temporarily disabling push checking, dodge-type moves in which the player passes through another (but can still be hit) can be implemented.
+docend
+
+sctrl	PlaySnd
+req	value	0	0
+opt	volumescale	0.0
+opt	channel	0
+opt	lowpriority	0
+opt	freqmul	0.0
+opt	loop	0
+opt	pan	0
+opt	abspan	0
+opt	Priority	0
+opt	LoopStart	0
+opt	LoopEnd	0
+opt	StartPosition	0
+opt	LoopCount	0
+opt	StopOnGetHit	0
+opt	StopOnChangeState	0
+docbgn
+Plays back a sound.
+
+Prior to version 1.0 RC8, a volume parameter was used instead of
+volumescale. The volume parameter is no longer supported and is
+now ignored.
+docend
+
+sctrl	PosAdd
+opt	x	0.0
+opt	y	0.0
+docbgn
+Offsets the player's position by the specified amounts. The X coordinate is relative to the player's axis, with positive values moving in the direction that the player is facing. The Y coordinate
+is relative to the player's axis, with negative values moving up.
+docend
+
+sctrl	PosFreeze
+opt	value	0
+docbgn
+Temporarily freezes the player's position.
+docend
+
+sctrl	PosSet
+opt	x	0.0
+opt	y	0.0
+docbgn
+Sets the player's position to the specified coordinates. The X coordinate is relative to the center of the screen, with positive values moving right. The Y coordinate is relative to the floor, with negative values moving up.
+docend
+
+sctrl	PowerAdd
+req	value	0
+docbgn
+Adds the specified amount to the player's power.
+docend
+
+sctrl	PowerSet
+req	value	0
+docbgn
+Sets the amount of power that the player has.
+docend
+
+sctrl	Projectile
+opt	ProjID	0
+opt	projanim	0
+opt	projhitanim	0
+opt	projremanim	0
+opt	projcancelanim	0
+opt	projscale	0.0	0.0
+opt	projremove	0
+opt	projremovetime	0
+opt	velocity	0.0	0.0
+opt	remvelocity	0.0	0.0
+opt	accel	0.0	0.0
+opt	velmul	0.0	0.0
+opt	projhits	0
+opt	projmisstime	0
+opt	projpriority	0
+opt	projsprpriority	0
+opt	projedgebound	0
+opt	projstagebound	0
+opt	projheightbound	0	0
+opt	offset	0	0
+opt	postype	string
+opt	projshadow	0
+opt	supermovetime	0
+opt	pausemovetime	0
+opt	ownpal	0
+opt	remappal	0	0
+opt	afterimage.time	0
+opt	afterimage.length	0
+opt	afterimage.palcolor	0
+opt	afterimage.palinvertall	0
+opt	afterimage.palbright	0
+opt	afterimage.palcontrast	0
+opt	afterimage.palpostbright	0
+opt	afterimage.paladd	0
+opt	afterimage.palmul	0.0
+opt	afterimage.timegap	0
+opt	afterimage.framegap	0
+opt	afterimage.trans	string
+opt	ProjAngle	0
+opt	ProjClsnAngle	0
+opt	ProjClsnScale	0
+opt	ProjDepthBound	0
+opt	ProjLayerNo	0
+docbgn
+Creates a projectile for the player. The Projectile controller takes all the parameters of the HitDef controller, which control the HitDef for the projectile. In addition, Projectile has the following additional parameters:
+All projectiles created by helpers immediately become owned by the root.
+The behavior of a projectile's HitDef is undefined when executed from a
+[Statedef -2] block while the player has another player's
+state and animation data.
+docend
+
+sctrl	RemapPal
+opt	source	0	0
+opt	dest	0	0
+docbgn
+Changes one of the player's palettes to another.
+Palette mappings are not transitive; i.e. mapping 1,0 to 2,0 and 2,0 to 3,0
+will not map 1,0 to 3,0.
+In 1.1 and newer, each player is allowed up to 8 different palette mappings
+at the same time.
+Subsequent calls of RemapPal will fail if the source pair is not already
+being mapped.  Unused mappings can be removed by setting dst_pal_grp to -1
+for a given source pair.
+docend
+
+sctrl	RemoveExplod
+opt	ID	0
+docbgn
+Removes all of a player's explods, or just the explods with a specified ID number.
+docend
+
+sctrl	ReversalDef
+req	reversal.attr	string
+docbgn
+Defines a reversal. If one of P2's Clns1 boxes comes in contact with one of P1's Clsn1 boxes and a ReversalDef is active, then P1 will reverse P2's attack. Use with p1stateno (and optionally p2stateno) for creating reversal attacks.
+ReversalDefs take the HitDef parameters pausetime, sparkno, hitsound, p1stateno, and p2stateno, plus:
+The sparkxy parameter is treated as an offset to P2's hitdef's sparkxy. The MoveHit trigger can be used to detect if P1 successfully reversed P2.
+docend
+
+sctrl	ScreenBound
+opt	value	0
+opt	movecamera	0	0
+opt	StageBound	0
+docbgn
+Specifies whether or not the player's movement should be constrained to the screen or not. Also determines whether the camera should move to follow the player or not. The results of this controller are valid for 1 tick.
+docend
+
+sctrl	SelfState
+req	value	0
+opt	ctrl	0
+opt	anim	0
+opt	Continue	0
+opt	ReadPlayerID	0
+docbgn
+Like ChangeState, except that this changes a player back to a state in his own state data. Use this when you have placed an opponent player in a custom state via an attack, and wish to restore the opponent to his own states.
+docend
+
+sctrl	SprPriority
+req	value	0
+opt	LayerNo	0
+docbgn
+Changes the player's sprite priority. Higher-priority sprites are drawn on top of lower-priority sprites.
+docend
+
+sctrl	StateTypeSet
+opt	statetype	string
+opt	movetype	string
+opt	physics	string
+docbgn
+Changes the current state type and move type. Useful for states that go from the ground into the air, etc.
+docend
+
+sctrl	SndPan
+req	channel	0
+req	pan	0
+docbgn
+Changes the panning of a currently playing sound. This controller may be continually triggered to smoothly move a sound across the sound field or to have a sound follow the player.
+docend
+
+sctrl	StopSnd
+req	channel	0
+docbgn
+Stops any sound which is playing on the specified channel.
+docend
+
+sctrl	SuperPause
+opt	time	0
+opt	anim	0
+opt	sound	0	0
+opt	pos	0.0
+opt	darken	0
+opt	p2defmul	0.0
+opt	poweradd	0
+opt	unhittable	0
+docbgn
+Freezes the gameplay and darkens the screen. While each player is frozen, no time passes for them. Use for a dramatic pause during the start of hyper attacks.
+If the Pause controller was previously executed, and the action is
+still paused, executing a SuperPause will preempt the Pause
+controller's effects. During the SuperPause, the time left until
+the Pause controller's effects expires will not count down.
+docend
+
+sctrl	TargetBind
+opt	time	0
+opt	ID	0
+opt	pos	0.0
+docbgn
+Binds the player's specified targets to a specified location relative to the player's axis.
+docend
+
+sctrl	TargetDrop
+opt	excludeID	0
+opt	keepone	0
+docbgn
+Drops all targets from the player's target list, except possibly for those having a specified target ID number. Useful for applying effects to only certain targets.
+docend
+
+sctrl	TargetFacing
+req	value	0
+opt	ID	0
+docbgn
+Turns all targets to face a specified direction relative to the player.
+docend
+
+sctrl	TargetLifeAdd
+req	value	0
+opt	ID	0
+opt	kill	0
+opt	absolute	0
+opt	Dizzy	0
+docbgn
+Adds the specified amount to all targets' life, scaled by the targets' defense multipliers if necessary.
+docend
+
+sctrl	TargetPowerAdd
+req	value	0
+opt	ID	0
+docbgn
+Adds the specified amount to all targets' power.
+docend
+
+sctrl	TargetState
+req	value	0
+opt	ID	0
+docbgn
+Makes all targets change to the specified state number.
+docend
+
+sctrl	TargetVelAdd
+opt	x	0.0
+opt	y	0.0
+opt	ID	0
+docbgn
+Adds the specified amounts to all targets' velocities. A positive x velocity is in the direction that the target is facing, while a positive y velocity is downward on the screen.
+docend
+
+sctrl	TargetVelSet
+opt	x	0.0
+opt	y	0.0
+opt	ID	0
+docbgn
+Sets all targets' velocities to the specified values. A positive x velocity is in the direction that the player is facing, while a positive y velocity is downward on the screen.
+docend
+
+sctrl	Trans
+req	trans	string
+opt	alpha	0	0
+docbgn
+Overrides the player's animation transparency parameters for current game tick. Useful for special effects.
+docend
+
+sctrl	Turn
+docbgn
+Instantly turns the player to face the opposite direction. Does not play a turning animation.
+docend
+
+sctrl	VarAdd
+req	v	0
+req	fv	0
+req	value	0
+opt	var($var_no)	0
+opt	fvar($var_no)	0.0
+docbgn
+Adds to one of the player's working variables. Either a float variable or an int variable can be added to by this controller.
+Due to historical reasons, note that the alternate VarAdd
+syntax listed above matches neither the syntax for variable
+assignment within an expression, nor the syntax for variable
+addition within an expression.
+If you have placed P2 in a custom state through a successful hit, do
+not use variable assignment within the custom states. Otherwise, you
+will overwrite P2's variables, which can cause unintended
+malfunction of the opponent player.
+docend
+
+sctrl	VarRandom
+req	v	0
+opt	range	0
+docbgn
+Sets the specified int variable to a random value. Float variables cannot be set by this controller.
+If you have placed P2 in a custom state through a successful hit, do
+not use variable assignment within the custom states. Otherwise, you
+will overwrite P2's variables, which can cause unintended
+malfunction of the opponent player.
+docend
+
+sctrl	VarRangeSet
+req	value	0
+req	fvalue	0.0
+opt	first	0
+opt	last	0
+docbgn
+Sets a contiguous range of the player's working variables to the same value. Either float variables or int variables can be set by this controller, but not both at the same time.
+If you have placed P2 in a custom state through a successful hit, do
+not use variable assignment within the custom states. Otherwise, you
+will overwrite P2's variables, which can cause unintended
+malfunction of the opponent player.
+docend
+
+sctrl	VarSet
+req	v	0
+req	fv	0
+req	value	0
+opt	var($var_no)	0
+opt	fvar($var_no)	0.0
+docbgn
+Sets one of the player's working variables. Either a float variable or an int variable can be set by this controller, but not both at the same time.
+Due to historical reasons, note that the alternate variable
+assignment syntax listed above does not exactly match the syntax for
+variable assignment within an expression.
+If you have placed P2 in a custom state through a successful hit, do
+not use variable assignment within the custom states. Otherwise, you
+will overwrite P2's variables, which can cause unintended
+malfunction of the opponent player.
+docend
+
+sctrl	VelAdd
+opt	x	0.0
+opt	y	0.0
+docbgn
+Adds the specified amounts to the player's velocity. A positive x velocity is in the direction that the player is facing, while a positive y velocity is downward on the screen.
+docend
+
+sctrl	VelMul
+opt	x	0.0
+opt	y	0.0
+docbgn
+Multiplies the player's velocity by the specified amounts. A positive x velocity is in the direction that the player is facing, while a positive y velocity is downward on the screen.
+docend
+
+sctrl	VelSet
+opt	x	0.0
+opt	y	0.0
+docbgn
+Sets the player's velocity to the specified values. A positive x velocity is in the direction that the player is facing, while a positive y velocity is downward on the screen.
+docend
+
+sctrl	VictoryQuote
+opt	value	0
+docbgn
+Selects a victory quote from the player to display in the next victory screen.
+This controller can be called by any player at any time during a match; however
+only the winning player will affect the quote that is shown.
+This controller only affects the victory screen immediately following the current match.
+This controller has no effect if executed by a helper.
+The actual victory quotes are specified in the [Quotes] group of the player's constants file.
+docend
+
+sctrl	Width
+opt	edge	0	0
+opt	player	0	0
+opt	value	0	0
+docbgn
+Temporarily changes the size of the player's width bar for 1 tick. Useful for controlling the "pushing" behavior when the player makes contact with another or with the sides of the screen.
+When collision box display is enabled, the edge width bar is
+displayed in orange, and the player width bar is displayed in
+yellow. Where they overlap, the overlapping region is displayed in
+bright yellow.
+docend
+
+sctrl	Zoom
+opt	scale	0
+opt	pos	0
+opt	lag	0
+opt	CameraBound	0
+opt	StageBound	0
+opt	Time	0
+docbgn
+Zoom was a beta feature in Mugen 1.1. It is a fully functional state controller in Ikemen GO.  
+docend
+
+trigger	Abs
+fmt	abs($exprn)
+docbgn
+Computes the absolute value of its argument.
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	Acos
+fmt	acos($exprn)
+docbgn
+Computes the arccosine (in radians) of the specified argument.
+Returns bottom if exprn evaluates to bottom, or if exprn is not in
+the domain of arccosine (which is [-1.0,1.0]).
+docend
+
+trigger	AILevel
+fmt	AILevel
+docbgn
+Returns the difficulty level of the player's AI.
+If AI is enabled on the player, the value ranges from 1 (easiest) to 8 (most difficult).
+If AI is not enabled on the player, the return value is 0.
+docend
+
+trigger	Alive
+fmt	alive
+docbgn
+Returns 1 if the player is still able to fight, 0 if the player has been KOed.
+docend
+
+trigger	Anim
+fmt	Anim
+docbgn
+Returns the current animation action number of the player.
+docend
+
+trigger	AnimElem
+fmt	AnimElem = $value1, = $value2
+docbgn
+Gets the animation-time elapsed since the start of a specified element of the current animation action. Useful for synchronizing events to elements of an animation action.
+(reminder: first element of an action is element 1, not 0)
+AnimElemTime has similar functionality to AnimElem, but can take expressions as its argument.
+Returns bottom if the specified element number is invalid for this
+action (e.g., it's too large or too small).
+Trigger in Format 1 is true if the player's animation is
+at the start of the element number specified by value1.
+In other words, if value1 is equal to n, it is true on the
+first game-tick of the nth element of the animation.
+Trigger in Format 2 compares the player's animation-time
+to t+value2, where t is time of the start of the element
+number specified by value1.
+
+AnimElem will not trigger on the first game-tick of the second or
+later loop of an animation with a finite looptime. For example,
+"AnimElem = 1" will trigger the first tick a player changes to an
+animation, but will not trigger on the tick that it loops. You may
+get it to trigger each time using "AnimElem = 1 || AnimTime = 0".
+docend
+
+trigger	AnimElemNo
+fmt	AnimElemNo($exprn)
+docbgn
+Returns the number of the animation element in the current action
+that would be displayed at the specified time. The argument to AnimElemNo represents the time to check, expressed in game ticks, relative to the present.
+Returns bottom if you try to check a time that would fall before the
+start of the current action.
+If the action is currently within its looping portion, then it is
+assumed to have been looping forever. That is, no matter how far into
+the past you check, AnimElemNo will always return an element number
+that lies within the looping portion of the action.
+docend
+
+trigger	AnimElemTime
+fmt	AnimElemTime($exprn)
+docbgn
+Gets the animation-time elapsed since the start of a specified element of the current animation action. Useful for synchronizing events to elements of an animation action.
+(reminder: first element of an action is element 1, not 0)
+Returns bottom if exprn evaluates to bottom, or if exprn evaluates
+to an element number that is not valid for the current action.
+AnimElemTime will not trigger on the first game-tick of the second or later loop of an animation with a finite looptime. For example, "AnimElemTime(1) = 0" will trigger the first tick a player changes to an animation, but will not trigger on the tick that it loops. You may get it to trigger each time using "AnimElemTime(1) = 0 || AnimTime = 0".
+docend
+
+trigger	AnimExist
+fmt	AnimExist($exprn)
+docbgn
+Returns 1 if the specified animation action exists for the player.
+The result of this trigger is undefined if the player has been placed in a custom state by a successful hit. In this situation, use SelfAnimExist.
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	AnimTime
+fmt	AnimTime
+docbgn
+Gives the difference between the looptime of the current animation action and the player's animation-time. Useful for knowing when the end of the animation has been reached. (Animation-time is the time in game-ticks that the player has spent within the current animation action.)
+The name may be confusing. Try to think of it as "time from the end of the animation". During the animation, AnimTime will always return a non-positive number.
+docend
+
+trigger	Asin
+fmt	asin($exprn)
+docbgn
+Computes the arcsine (in radians) of the specified argument.
+Returns bottom if exprn evaluates to bottom, or if exprn is not in
+the domain of arcsine (which is [-1.0,1.0]).
+docend
+
+trigger	Atan
+fmt	atan($exprn)
+docbgn
+Computes the arctangent (in radians) of the specified argument.
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	AuthorName
+fmt	AuthorName = "$name"
+docbgn
+Returns the player's author's name (specified in the .DEF file). This may also be useful for telling apart characters with the same name but different authors.
+docend
+
+trigger	BackEdge
+fmt	BackEdge
+docbgn
+BackEdge returns the x position of the edge of the screen that is behind the player, in absolute stage coordinates.
+This trigger is equivalent to the expression "ifelse(facing = 1, LeftEdge, RightEdge)".
+docend
+
+trigger	BackEdgeBodyDist
+fmt	BackEdgeBodyDist
+docbgn
+BackEdgeBodyDist gives the distance from the back of the player, as determined by the end of his width bar, to the back edge of the screen.
+docend
+
+trigger	BackEdgeDist
+fmt	BackEdgeDist
+docbgn
+BackEdgeDist gives the distance between the x-axis of the player and the edge of the screen behind of the player.
+docend
+
+trigger	BottomEdge
+fmt	BottomEdge
+docbgn
+BottomEdge returns the y position of the bottom edge of the screen, in absolute stage coordinates.
+This trigger is equivalent to the expression "Pos Y - ScreenPos Y + GameHeight".
+docend
+
+trigger	CameraPos
+fmt	CameraPos $X
+docbgn
+Gets the value of the camera's position relative to the stage.
+The home position of the camera is 0, 0.
+The value of "CameraPos X" increases as the camera moves to the right.
+The value of "CameraPos Y" decreases as the camera moves upwards.
+The units of the position returned is in the coordspace of the player.
+docend
+
+trigger	CameraZoom
+fmt	CameraZoom
+docbgn
+Gets the value of the camera's zoom factor.
+The zoom factor de
+docend
+
+trigger	CanRecover
+fmt	CanRecover
+docbgn
+If the player is currently in a falling state, returns 1 if he is currently able to recover, and 0 if he is not currently able to recover. If the player is not currently falling, the output of this trigger is undefined.
+docend
+
+trigger	Ceil
+fmt	ceil($exprn)
+docbgn
+Implements the "ceiling" function. Returns the least integer which is greater than or equal to the specified argument.
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	Command
+fmt	Command = "$command_name"
+docbgn
+Triggers if the user has input the specified command.
+
+In Ikemen-GO, if a character has ikemenversion, when the Command trigger is
+redirected to another player, the engine will first check if the other player
+is performing its own command with the same name. If not, it'll check if it's
+performing the command from our own command list. Otherwise it will work like
+Mugen.
+docend
+
+trigger	Cond
+fmt	Cond($exp_cond,$exp_true,$exp_false)
+docbgn
+This trigger takes three arguments. The first argument is a condition argument.
+If the condition is true (i.e., nonzero), Cond evaluates and returns the second
+argument. If the condition is false, Cond evaluates and returns the third
+argument. If the condition is bottom, then Cond returns bottom without
+evaluating the second or third arguments.
+In all cases, any unused argument(s) are not evaluated. Therefore, Cond can be
+used instead of IfElse to avoid any side effects that would be caused by
+evaluating the unused argument (e.g., variable assignment, or performing a
+computation that would cause bottom to be generated).
+Returns bottom if exp_cond evaluates to bottom, or if exp_true or exp_false
+(whichever is actually used) evaluates to bottom.
+docend
+
+trigger	Const
+fmt	Const($param_name)
+docbgn
+Returns the value of one of the player's constants.
+none
+docend
+
+trigger	Const240p
+fmt	Const240p($exprn)
+docbgn
+Converts a value from the 240p coordinate space to the player's coordinate space.
+The conversion ratio between coordinate spaces is the ratio of their widths.
+Returns bottom if exprn evaluates to bottom.
+Non-zero position and velocity offset values in common1.cns should use one of
+the Const triggers to maintain consistency with characters from a different
+coordinate space.
+docend
+
+trigger	Const480p
+fmt	Const480p($exprn)
+docbgn
+Converts a value from the 480p coordinate space to the player's coordinate space.
+The conversion ratio between coordinate spaces is the ratio of their widths.
+Returns bottom if exprn evaluates to bottom.
+Non-zero position and velocity offset values in common1.cns should use one of
+the Const triggers to maintain consistency with characters from a different
+coordinate space.
+docend
+
+trigger	Const720p
+fmt	Const720p($exprn)
+docbgn
+Converts a value from the 720p coordinate space to the player's coordinate space.
+The conversion ratio between coordinate spaces is the ratio of their widths.
+Returns bottom if exprn evaluates to bottom.
+Non-zero position and velocity offset values in common1.cns should use one of
+the Const triggers to maintain consistency with characters from a different
+coordinate space.
+docend
+
+trigger	Cos
+fmt	cos($exprn)
+docbgn
+Computes the cosine of the specified argument (in radians.)
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	Ctrl
+fmt	Ctrl
+docbgn
+Returns the control flag of p1.
+docend
+
+trigger	DrawGame
+fmt	Draw
+docbgn
+Returns 1 if the player (or the player's team, in team mode) has ended the round in a draw, 0 otherwise.
+docend
+
+trigger	E
+fmt	e
+docbgn
+Returns the value of e (2.718281828...)
+docend
+
+trigger	Exp
+fmt	exp($exprn)
+docbgn
+Computes the exponential of the argument (e raised to the power of
+the argument.) This produces slightly more accurate results than the
+equivalent expression e**(argument).
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	Facing
+fmt	Facing
+docbgn
+Returns 1 if the player is facing to the right, and -1 if the player is facing to the left.
+docend
+
+trigger	Floor
+fmt	floor($exprn)
+docbgn
+Implements the floor function. Returns the greatest integer less than or equal to its argument.
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	FrontEdge
+fmt	FrontEdge
+docbgn
+FrontEdge returns the x position of the edge of the screen that is in front the player, in absolute stage coordinates.
+This trigger is equivalent to the expression "ifelse(facing = 1, RightEdge, LeftEdge)".
+docend
+
+trigger	FrontEdgeBodyDist
+fmt	FrontEdgeBodyDist
+docbgn
+FrontEdgeBodyDist gives the distance between the front of the player (as determined by the front edge of his width bar) and the edge of the screen.
+docend
+
+trigger	FrontEdgeDist
+fmt	FrontEdgeDist
+docbgn
+FrontEdgeDist gives the distance between the x-axis of the player and the edge of the screen in front of the player.
+docend
+
+trigger	FVar
+fmt	FVar($exprn)
+docbgn
+This trigger takes a mandatory variable number as an argument. It returns the value of the player's specified float variable.
+Returns bottom if exprn evaluates to bottom, or if exprn evaluates
+to an invalid variable index.
+docend
+
+trigger	GameHeight
+fmt	GameHeight
+docbgn
+Returns the current height of the game space in the player's local coordinate space.
+The game space is defined as the currently-visible area of the stage in which players interact.
+The dimensions of the game space at a zoom factor of 1.0 is specified by the
+GameWidth and GameHeight parameters in mugen.cfg.
+GameWidth and GameHeight scale inversely with the zoom factor of the camera.
+For example, if the camera zoom factor is 0.5, the values returned by GameWidth
+and GameHeight will be double that of at zoom factor 1.
+ScreenWidth and ScreenHeight are the equivalent triggers that are not
+affected by the camera zoom factor.
+In Ikemen-GO, if MugenVersion is specified as 1.0 in character's [Info] section, GameHeight returns the same value as ScreenHeight.
+docend
+
+trigger	GameTime
+fmt	GameTime
+docbgn
+Returns the total number of ticks that have elapsed in the game so far.
+docend
+
+trigger	GameWidth
+fmt	GameWidth
+docbgn
+Returns the current width of the game space in the player's local coordinate space.
+The game space is defined as the currently-visible area of the stage in which players interact.
+The dimensions of the game space at a zoom factor of 1.0 is specified by the
+GameWidth and GameHeight parameters in mugen.cfg.
+GameWidth and GameHeight scale inversely with the zoom factor of the camera.
+For example, if the camera zoom factor is 0.5, the values returned by GameWidth
+and GameHeight will be double that of at zoom factor 1.
+ScreenWidth and ScreenHeight are the equivalent triggers that are not
+affected by the camera zoom factor.
+
+In Ikemen-GO, if MugenVersion is specified as 1.0 in character's [Info] section, GameWidth returns the same value as ScreenWidth.
+docend
+
+trigger	GetHitVar
+fmt	GetHitVar($param_name)
+docbgn
+When the player is in a gethit state, returns the value of the specified hit parameter.
+
+xveladd: Returns the additional x-velocity that is added to the
+player's own when he is KOed. (float)
+yveladd: Returns the additional y-velocity that is added to the
+player's own when he is KOed. (float)
+type: Returns the type of the hit: 0 for none, 1 for high, 2 for
+low, 3 for trip (ground only).
+animtype: Returns the animation type of the hit. (0 for light, 1 for
+medium, 2 for hard, 3 for back, 4 for up, 5 for diag-up)
+airtype: Returns the type specified in the HitDef for an air hit.
+groundtype: Returns the type specified in the HitDef for a ground
+hit.
+damage: Returns the damage given by the hit. (int)
+hitcount: Returns the number of hits taken by the player in current
+combo. (int)
+fallcount: Returns the number of times player has hit the ground in
+the current combo. (int)
+hitshaketime: Returns time player is "frozen" during the hit. This
+number counts down by 1 for each game tick, and stops
+when it reaches zero. (int)
+hittime: Returns time before player regains control and returns to
+an idle state after being hit.
+This counts down by 1 per game tick, as long as hitshaketime
+(see above) is greater than 0. It stops counting down when
+the value reaches -1. (int)
+"GetHitVar(hittime) < 0" is equivalent to the HitOver
+trigger.
+slidetime: Returns time that player slides backwards (on the ground)
+after the hit. (int)
+ctrltime: Returns time before player regains control after guarding
+the hit. (int)
+recovertime: Returns time before player gets up from liedown state
+This number counts down to 0 for each game tick, and
+will count down faster if buttons are hit. (int)
+xoff: "Snap" x offset when hit (deprecated)
+yoff: "Snap" y offset when hit (deprecated)
+xvel: Fixed x-velocity imparted by hit. (float)
+yvel: Fixed y-velocity imparted by hit. (float)
+yaccel: y acceleration set by the hit. (float)
+chainid: Player-assigned chainID for last hit taken. (int)
+guarded: True if the last hit was guarded, false otherwise.
+isbound: True if the player is the subject of an attacker's
+TargetBind controller. Useful to prevent being stuck in
+thrown states. (int)
+fall: True if falling, false otherwise (int)
+fall.damage: Damage taken upon fall (int)
+fall.xvel: x velocity after bouncing off ground (float)
+fall.yvel: y velocity after bouncing off ground (float)
+fall.recover: True if player can recover, false otherwise.
+fall.recovertime: time before player can recover. (int)
+fall.kill: value of fall.kill parameter in attacker's hitdef. (int)
+fall.envshake.time: See below. (int)
+fall.envshake.freq: See below. (float)
+fall.envshake.ampl: See below. (int)
+fall.envshake.phase: Returns values set by the fall.envshake.*
+parameters in an attacker's hitdef. (float)
+docend
+
+trigger	HitCount
+fmt	HitCount
+docbgn
+Returns the number times the player's current attack move has hit one or more opponents. This value is valid only for a single state; after any state change, it resets to 0. To prevent it from resetting to 0, set hitcountpersist in the StateDef (see cns documentation for details). The HitCount and UniqHitCount triggers differ only when the player is hitting more than one opponent. In the case where the player is hitting two opponents with the same attack, HitCount will increase by 1 for every hit, while UniqHitCount increases by 2.
+docend
+
+trigger	HitDefAttr
+docbgn
+Checks the attribute parameter of the player's currently-active HitDef.
+If the player is not currently attacking, then no parameters will match.
+Can be used for simple move-interrupts from weaker to stronger attacks in the CMD file.
+Note:HitDefAttr != value1, value2is logically equivalent to!(HitDefAttr = value1, value2).
+docend
+
+trigger	HitFall
+fmt	HitFall
+docbgn
+If the player is currently in a gethit state, returns the fall flag of the hit. The output of this trigger is undefined if the player is not in a gethit state. For an explanation of the fall flag, see the HitDef documentation.
+docend
+
+trigger	HitOver
+fmt	HitOver
+docbgn
+If the player is in a gethit state, returns 1 when the hittime has expired, and 0 otherwise. For an explanation of hittime, see the HitDef documentation.
+docend
+
+trigger	HitPauseTime
+fmt	HitPauseTime
+docbgn
+Returns the time until the player's hitpause expires. The player enters a hitpause when his attack comes in contact with an opponent. The initial hitpause time is equal to the first value of the pausetime parameter in the player's HitDef. If ignorehitpause is not set, this will always return 0.
+docend
+
+trigger	HitShakeOver
+fmt	HitShakeOver
+docbgn
+If the player is in a gethit state, returns 1 if the hit shake (the period when he is shaking in place) has ended, and 0 otherwise.
+docend
+
+trigger	HitVel
+fmt	HitVel $X
+docbgn
+Gets the value of the velocity imparted to the player by a hit.
+You must specify the component that you want to check, eg.
+"HitVel Y" to check the vertical velocity component.
+A positive HitVel Y means that the player is moving upward on the
+screen. A positive HitVel X means that the player is moving
+backward. Note that the HitVel X trigger behaves in the opposite
+manner to the Vel X trigger.
+docend
+
+trigger	ID
+fmt	ID
+docbgn
+Returns the ID number of the player. The ID number is unique for every player throughout the course of a match. Any helper that is created during this time will also receive its own unique ID number. This trigger may be useful for getting opponents' ID numbers, to be later used with the "playerID" redirection keyword (see exp docs). Do not confuse playerID with targetID.
+docend
+
+trigger	IfElse
+fmt	IfElse($exp_cond,$exp_true,$exp_false)
+docbgn
+This trigger takes three arguments. If the first is nonzero, IfElse returns the
+value of the second argument. Else, it returns the value of the third argument.
+All arguments are evaluated prior to execution of IfElse. In particular, any
+side effects caused by evaluation of the arguments (such as variable
+assignment, or performing a computation that generates a warning) will occur.
+If you wish to avoid these side effects, then use Cond.
+Returns bottom if exp_cond evaluates to bottom, or if exp_true or exp_false (whichever is returned) evaluates to bottom.
+docend
+
+trigger	InGuardDist
+fmt	InGuardDist
+docbgn
+Returns 1 if the player is within guarding distance of an opponent's physical or projectile attack. The guarding distance is the value of the guard.dist parameter of the opponent's HitDef. Returns 0 if out of guard distance, or the opponent is not attacking.
+docend
+
+trigger	IsHelper
+fmt	IsHelper($exprn)
+docbgn
+This trigger takes an optional ID number as an argument. If the ID number is omitted, IsHelper returns 1 if the player is a helper character, and 0 otherwise. If the ID number is included, then IsHelper returns 1 if the player is a helper character with the specified ID number, and 0 otherwise.
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	IsHomeTeam
+fmt	IsHomeTeam
+docbgn
+Returns 1 if the player's team is considered the "home team". In arcade modes, the computer is always considered the home team. In versus modes, P1's side (left) is the home team.
+docend
+
+trigger	LeftEdge
+fmt	LeftEdge
+docbgn
+LeftEdge returns the x position of the left edge of the screen, in absolute stage coordinates.
+This trigger is equivalent to the expression "CameraPos X - GameWidth / 2".
+docend
+
+trigger	Life
+fmt	Life
+docbgn
+Returns the player's life.
+docend
+
+trigger	LifeMax
+fmt	LifeMax
+docbgn
+Returns the maximum amount of life the player can have. This is normally the value of the "life" parameter in the [Data] group of the player variables, but may be different in situations such as team modes.
+docend
+
+trigger	Ln
+fmt	ln($exprn)
+docbgn
+Returns the natural logarithm of its argument. This produces slightly more accurate results than the otherwise equivalent expression log(e,(argument)).
+Returns bottom if exprn evaluates to bottom, or if exprn is not
+positive.
+docend
+
+trigger	Log
+fmt	Log($exp1,$exp2)
+docbgn
+Takes two arguments a and b, and returns the base-a logarithm of b.
+Returns bottom if either of exp1 or exp2 evaluates to bottom, or if
+either of exp1 or exp2 is not positive.
+docend
+
+trigger	Lose
+fmt	Lose
+docbgn
+Returns 1 if the player (or the player's team, in team mode) has lost the round, 0 otherwise. Can be suffixed with "KO" or "Time" to return 1 only when the round has been lost by a KO or by time expiring, respectively.
+docend
+
+trigger	LoseKO
+fmt	LoseKO
+docbgn
+Returns 1 if the player (or the player's team, in team mode) has lost the round, 0 otherwise. Can be suffixed with "KO" or "Time" to return 1 only when the round has been lost by a KO or by time expiring, respectively.
+docend
+
+trigger	LoseTime
+fmt	LoseTime
+docbgn
+Returns 1 if the player (or the player's team, in team mode) has lost the round, 0 otherwise. Can be suffixed with "KO" or "Time" to return 1 only when the round has been lost by a KO or by time expiring, respectively.
+docend
+
+trigger	MatchNo
+fmt	MatchNo
+docbgn
+Returns the current match number.
+The current match number is always 1 in versus-type modes. In Arcade and Team Arcade modes, the match number starts at 1 and increments every time a new match starts (does not increment on continue). If you finish the arcade mode and start a new game, the match number reverts to 1.
+docend
+
+trigger	MatchOver
+fmt	MatchOver
+docbgn
+Returns 1 if the match has ended. (For example, in the case of a best-of-three match, this will return true when one of the players or teams has won two rounds.)
+Currently, MatchOver does not return true until the players start
+their win poses (state 180). This behavior may be subject to change
+in future releases.
+docend
+
+trigger	MoveContact
+fmt	MoveContact
+docbgn
+This trigger is valid only when the player is in an attack state.
+MoveContact gives a non-zero value if P2 has either been hit, or has guarded P1's attack. It gives 0 otherwise. P1 is the player, and P2 is his opponent.
+Typically used with the "StateNo" and "Command" triggers for detecting move-interrupts in the CMD file.
+On attack contact, MoveContact returns 1. After contact, MoveContact's return value will increase by 1 for each game tick that P1 is not paused (P1 gets paused on contact; see pausetime parameter in HitDef controller). The values of MoveGuarded, MoveHit and MoveReversed increment in the same fashion.
+Note 1: the values of MoveContact, MoveGuarded, MoveHit and MoveReversed are set simultaneously. For example, if one HitDef in a move hits successfully, MoveHit will return non-zero. If a following HitDef in the same move is guarded, MoveGuarded will return non-zero, and the other three triggers will return 0.
+Note 2: the values of the four Move* triggers reset to 0 and stop incrementing after a state transition. See "movehitpersist" parameter for StateDefs (CNS docs) for how to override this behavior.
+docend
+
+trigger	MoveGuarded
+fmt	MoveGuarded
+docbgn
+This trigger is valid only when the player is in an attack state.
+MoveGuarded gives a non-zero value if P2 is guarding, or has guarded, P1's attack. It gives 0 otherwise. P1 is the player, and P2 is his opponent.
+Typically used with the "StateNo" and "Command" triggers for detecting move-interrupts in the CMD file.
+See Details section for MoveContact trigger.
+docend
+
+trigger	MoveHit
+fmt	MoveHit
+docbgn
+This trigger is valid only when the player is in an attack state.
+MoveHit gives a non-zero value if P2 has been hit by P1's attack. It gives 0 otherwise.
+Typically used with the "StateNo" and "Command" triggers for detecting move-interrupts in the CMD file.
+See Details section for MoveContact trigger.
+docend
+
+trigger	MoveType
+fmt	MoveType = $move_type
+docbgn
+MoveType gives the player's move-type. Refer to the section
+on StateDef in the CNS documentation for more details on MoveType.
+Useful for "move interrupts" in the CMD file.
+docend
+
+trigger	MoveReversed
+fmt	MoveReversed
+docbgn
+This trigger is valid only when the player is in an attack state.
+MoveReversed gives a non-zero value if P1's attack has been reversed by P2. It gives 0 otherwise.
+See Details section for MoveContact trigger.
+docend
+
+trigger	Name
+fmt	Name = "$name"
+docbgn
+Returns the player's name (the internal name specified in the .DEF file, which may not be the same as the displayed name).
+docend
+
+trigger	NumEnemy
+fmt	NumEnemy
+docbgn
+NumEnemy returns the number of opponents that exist. Neutral players and normal helpers are not considered opponents.
+docend
+
+trigger	NumExplod
+fmt	NumExplod($exprn)
+docbgn
+This trigger takes an ID number as an optional argument. If the ID number is omitted, NumExplod returns the number of explods owned by the player. If the ID number is included, then NumExplod returns the number of explods with that ID number that are owned by the player. The ID number must be greater than -1. An ID number of -1 or less will give the same behavior as if the ID number is omitted.
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	NumHelper
+fmt	NumHelper($exprn)
+docbgn
+This trigger takes an ID number as an optional argument. If the ID number is omitted, then NumHelper returns the total number of helpers currently owned by the player. If the ID number is included, then NumHelper returns the total number of helpers with that ID number owned by the player. The ID number must be greater than 0. If the ID
+number is 0 or less, then all helpers are counted.
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	NumPartner
+fmt	NumPartner
+docbgn
+NumPartner returns the number of partners that exist. Neutral players and normal helpers are not considered partners.
+docend
+
+trigger	NumProj
+fmt	NumProj
+docbgn
+Returns the total number of projectiles currently owned by the player.
+docend
+
+trigger	NumProjID
+fmt	NumProjID($exprn)
+docbgn
+This trigger takes an ID number as a required argument. It returns the number of projectiles currently owned by the player and having the specified ID number.
+If a negative ID is specified, then the ID defaults to 0. Returns
+bottom if exprn evaluates to bottom.
+docend
+
+trigger	NumTarget
+fmt	NumTarget($exprn)
+docbgn
+This trigger takes an ID number as an optional argument. If the ID number is omitted, NumTarget returns the current number of targets for the player. If the ID number is included, then NumTarget returns the number of targets for the player which have that target ID number. The ID number must be greater than -1. An ID number of -1 or less will give the same behavior as if the ID number is omitted.
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	P1Name
+docbgn
+This is an alias for the Name trigger. See "Name".
+docend
+
+trigger	P2BodyDist
+fmt	P2BodyDist $X
+docbgn
+Returns the distance of P2 from P1, where P1 is the player, and P2 is his opponent. P2BodyDist is useful in the CMD for cases where P1 has an attack that is different when performed close to P2.
+For comparing the Y-distance, P2BodyDist gives the difference in the
+heights of the players' Y-axes. A negative value means that P2 is
+above P1.
+For comparing the X-distance, P2BodyDist gives the
+X-distance of P2's front from P1's front. So, if the
+players are standing right next to each other, then
+P2BodyDist is 0. Remember that you can set the width of
+the player in "front.width", etc. under [Size] in the
+player variables.
+In Ikemen-GO, this trigger accepts both the Y and Z component.
+For comparing the Y-distance, if the character has an ikemenversion,
+P2BodyDist gives the distance between the size boxes of the two players.
+For comparing the Z-distance, if there is overlap between the players'
+Z width, it gives 0. Otherwise, it gives the distance between
+their theoretical width boxes.
+See also P2Dist.
+docend
+
+trigger	P2Dist
+fmt	P2Dist $X
+docbgn
+Returns the distance of P2 from P1, where P1 is the player, and P2 is his opponent.
+For comparing the Y-distance, P2Dist gives the difference in the
+heights of the players' Y-axes. A negative value means that P2 is
+above P1.
+For comparing the X-distance, P2Dist gives the X-distance
+of P2's axis from P1's axis. A positive value indicates P2
+is in front of P1.
+In Ikemen-GO, the P2Dist trigger now also accepts a Z argument. Returns the distance between the players in the Z axis.
+See also P2BodyDist.
+docend
+
+trigger	P2Life
+docbgn
+Same as Life, except that this returns the opponent's life.
+docend
+
+trigger	P2MoveType
+docbgn
+Same as MoveType, except that this returns the opponent's movetype.
+docend
+
+trigger	P2Name
+docbgn
+Same as P1Name, except that this returns the name of the primary opponent (the opponent in versus mode, or the first opponent in team mode).
+If there is no primary opponent, then p2name = "name" returns 0 no
+matter what name is specified. Similarly, p2name != "name" will return 1 no matter what name is specified.
+docend
+
+trigger	P2StateNo
+docbgn
+Same as StateNo, except that this returns the opponent's state number.
+Returns bottom if p2 does not exist. (For instance, if the round
+has been won.)
+docend
+
+trigger	P2StateType
+docbgn
+Same as StateType, except that this returns the opponent's state type.
+Returns bottom if p2 does not exist. (For instance, if the round
+has been won.)
+docend
+
+trigger	P3Name
+docbgn
+Same as P1Name, except that this returns the name of the player's teammate, if present.
+If there is no teammate, then p3name = "name" returns 0 no matter what name is specified. Similarly, p3name != "name" will return 1 no matter what name is specified.
+docend
+
+trigger	P4Name
+docbgn
+Same as P1Name, except that this returns the name of the secondary opponent, if present.
+If there is no secondary opponent, then p4name = "name" returns 0 no matter what name is specified. Similarly, p4name != "name" will return 1 no matter what name is specified.
+docend
+
+trigger	PalNo
+fmt	PalNo
+docbgn
+Returns the palette number of the player (i.e., the color scheme chosen for the character during character select.)
+
+The palette ordering is specified in the character's def file.
+If omitted, the default ordering is:
+A  B  C  X  Y  Z A2 B2 C2 X2 Y2 Z2
+1  2  3  4  5  6  7  8  9 10 11 12
+docend
+
+trigger	ParentDist
+fmt	ParentDist $X
+docbgn
+This trigger is only valid for helper-type characters.
+ParentDist returns the distance from the helper to its parent. It works similarly to P2Dist.
+Returns bottom if the player does not have a parent (e.g., if the
+parent was destroyed or KO'd).
+For comparing the Y-distance, ParentDist gives the difference in the
+heights of the players' Y-axes. A negative value means that the
+parent is above its child.
+For comparing the X-distance, ParentDist gives the X-distance
+of the parent's axis from the child's axis. A positive value
+indicates the parent is in front of the child.
+In Ikemen-GO, the ParentDist trigger now also accepts a Z argument. Returns the distance between the helper and its parent in the Z axis.
+docend
+
+trigger	Pi
+fmt	pi
+docbgn
+This trigger returns the numeric value of pi (3.141593...)
+docend
+
+trigger	Pos
+fmt	Pos $X
+docbgn
+Gets the value of the player's position. You must specify the component that you want to check, eg. "Pos Y" to check the Y-position.
+For "Pos X", the value is relative to the center of the
+screen (value 0). Negative is left, positive is right.
+Due to historical reasons, "Pos X" does not return absolute
+position of the player (i.e. relative to the center of the stage),
+which may be the more intuitive behavior.
+To get the absolute position of the player, use "Pos X + CameraPos X".
+For "Pos Y", the value is relative to the floor. Negative
+is higher up, positive is below the floor.
+In Ikemen-GO, the RootDist trigger now also accepts a Z argument. Returns the distance between the helper and its root in the Z axis.
+docend
+
+trigger	Power
+fmt	Power
+docbgn
+Returns the amount of power the player has.
+docend
+
+trigger	PowerMax
+fmt	PowerMax
+docbgn
+Returns the maximum amount of power the player can have. This is normally 3000 (level 3).
+docend
+
+trigger	PlayerIDExist
+fmt	PlayerIDExist(ID_number)
+docbgn
+Returns 1 if a player with the specified ID number exists, 0 otherwise. This ID number is obtained using the "ID" trigger (see ID). Do not confuse PlayerID with TargetID.
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	PrevStateNo
+fmt	StateNo
+docbgn
+Returns the number of the state that the player was last in. The results of this trigger are not guaranteed to be accurate.
+docend
+
+trigger	ProjCancelTime
+fmt	ProjCancelTime($exprn)
+docbgn
+This trigger takes an required nonnegative ID number as an argument.  If the player's last projectile to make any kind of contact was cancelled by an opponent's projectile and had the specified ID number, then ProjCancelTime returns the number of ticks since that contact occurred. If the specified ID number is 0, then the projectile ID is not checked. If no projectile meets all the above conditions, then ProjCancelTime returns -1.
+Returns bottom if exprn evaluates to bottom. If a negative ID is
+specified, then the ID defaults to zero.
+docend
+
+trigger	ProjContact
+fmt	ProjContact$1234 = $value, = $value2
+docbgn
+This trigger takes an optional ID number as a suffix. If the ID number is omitted, ProjContact returns true if any of the player's projectiles either successfully hit the opponent or were guarded by the opponent. When the ID number is specified, ProjContact returns true only if any of the player's projectiles with the specified ID number either successfully hit the opponent or was guarded.
+ProjContact will trigger once for each hit of the projectile, so a
+multi-hit projectile can trigger multiple times.
+The first form of ProjContact shown above is only valid for one tick
+after contact, unlike MoveContact.
+For the second form, ProjContact returns true if the projectile made
+contact n ticks ago, where n is a nonnegative number satisfying the
+relation "n [oper] value2".
+Specifying an ID number of 0 gives the same behavior as if the ID
+number is omitted (check all projectiles).
+docend
+
+trigger	ProjContactTime
+fmt	ProjContactTime($exprn)
+docbgn
+This trigger takes an required nonnegative ID number as an argument.  If the player's last projectile to make any kind of contact, made contact with the opponent and had the specified ID number, then ProjContactTime returns the number of ticks since that contact occurred. If the specified ID number is 0, then the projectile ID is not checked. If no projectile meets all the above conditions, then ProjContactTime returns -1.
+Returns bottom if exprn evaluates to bottom. If a negative ID is
+specified, then the ID defaults to zero.
+docend
+
+trigger	ProjGuarded
+fmt	ProjGuarded$1234 = $value, = $value2
+docbgn
+This trigger takes an optional ID number as a suffix. If the ID number is omitted, ProjGuarded returns true if any of the player's projectiles were guarded by the opponent. When the ID number is specified, ProjGuarded returns true only if one of the player's projectiles with the specified ID number was guarded by the opponent.
+ProjGuarded will trigger once for each hit of the projectile, so a
+multi-hit projectile can trigger multiple times.
+The first form of ProjGuarded shown above is only valid for one tick
+after hit, unlike MoveGuarded.
+For the second form, ProjGuarded returns true if the projectile was
+guarded n ticks ago, where n is a nonnegative number satisfying the
+relation "n [oper] value2".
+Specifying an ID number of 0 gives the same behavior as if the ID
+number is omitted (check all projectiles).
+docend
+
+trigger	ProjGuardedTime
+fmt	ProjCancelTime($exprn)
+docbgn
+This trigger takes an required nonnegative ID number as an argument.  If the player's last projectile to make any kind of contact was guarded by the opponent and had the specified ID number, then ProjGuardedTime returns the number of ticks since that contact occurred. If the specified ID number is 0, then the projectile ID is not checked. If no projectile meets all the above conditions, then ProjGuardedTime returns -1.
+Returns bottom if exprn evaluates to bottom. If a negative ID is
+specified, then the ID defaults to zero.
+docend
+
+trigger	ProjHit
+fmt	ProjHit$1234 = $value, = $value2
+docbgn
+This trigger takes an optional positive ID number as a suffix. If the ID number is omitted, ProjHit returns true if any of the player's projectiles successfully hit the opponent. When the ID number is specified, ProjHit returns true only if one of the player's projectiles with the specified ID number successfully hit the opponent.
+ProjHit will trigger once for each hit of the projectile, so a
+multi-hit projectile can trigger multiple times.
+The first form of ProjHit shown above is only valid for one tick
+after hit, unlike MoveHit.
+For the second form, ProjHit returns true if the projectile hit
+n ticks ago, where n is a nonnegative number satisfying the relation
+"n [oper] value2".
+Specifying an ID number of 0 gives the same behavior as if the ID
+number is omitted (check all projectiles).
+docend
+
+trigger	ProjHitTime
+fmt	ProjHitTime($exprn)
+docbgn
+This trigger takes an required nonnegative ID number as an argument.  If the player's last projectile to make any kind of contact successfully hit the opponent and had the specified ID number, then ProjHit returns the number of ticks since that contact occurred. If the specified ID number is 0, then the projectile ID is not checked.
+If no projectile meets all the above conditions, then ProjHitTime returns -1.
+Returns bottom if exprn evaluates to bottom. If a negative ID is
+specified, then the ID defaults to zero.
+docend
+
+trigger	Random
+fmt	Random
+docbgn
+Returns a random number between 0 and 999, inclusive.
+docend
+
+trigger	RightEdge
+fmt	LeftEdge
+docbgn
+RightEdge returns the x position of the right edge of the screen, in absolute stage coordinates.
+This trigger is equivalent to the expression "CameraPos X + GameWidth / 2".
+docend
+
+trigger	RootDist
+fmt	RootDist $X
+docbgn
+This trigger is only valid for helper-type characters.
+RootDist returns the distance from the helper to its root. The root is the main player character who owns the helper: for instance, if you select Kumquat to play with, and Kumquat spawns a helper named Kiwi, who in turn spawns a helper named Penguin, then Penguin's root is Kumquat, and Penguin is a descendant of Kumquat. RootDist works similarly to P2Dist.
+Returns bottom if the player has no root.
+For comparing the Y-distance, RootDist gives the difference in the
+heights of the players' Y-axes. A negative value means that the
+root is above its descendant.
+For comparing the X-distance, ParentDist gives the X-distance
+of the root's axis from the descendant's axis. A positive value
+indicates the root is in front of its descendant.
+docend
+
+trigger	RoundNo
+fmt	RoundNo
+docbgn
+Returns the current round number.
+docend
+
+trigger	RoundsExisted
+fmt	RoundsExisted
+docbgn
+Returns the number of rounds the player has existed for. On the first round, returns 0. This is useful for a Turns mode intro.
+docend
+
+trigger	RoundState
+fmt	RoundState
+docbgn
+Returns the current round state number.
+
+Return values:
+-1. (Ikemen-GO) Victory, win/results and continue screen
+0. Pre-intro  - screen fades in
+1. Intro
+2. Fight - players do battle
+3. Pre-over - just a round is won or lost
+4. Over - win poses
+docend
+
+trigger	ScreenPos
+fmt	ScreenPos $X
+docbgn
+Gets the value of the player's position relative to the top-right corner of the screen.
+For "ScreenPos X", the value is relative to the left of the
+screen (value 0). Negative is left, positive is right.
+For "ScreenPos Y", the value is relative to the top of the screen.
+Negative is above the screen, positive is downward.
+docend
+
+trigger	ScreenHeight
+fmt	ScreenHeight
+docbgn
+Returns the height of the screen space in the player's local coordinate space.
+ScreenWidth and ScreenHeight are not affected by the camera zoom factor.
+docend
+
+trigger	ScreenWidth
+fmt	ScreenWidth
+docbgn
+Returns the width of the screen space in the player's local coordinate space.
+ScreenWidth and ScreenHeight are not affected by the camera zoom factor.
+docend
+
+trigger	SelfAnimExist
+docbgn
+Like AnimExist, except that this only checks P1's animation data. If P1 has been given P2's animation data by a hit, SelfAnimExist will not check P2's animation data to determine whether or not a given action exists.
+docend
+
+trigger	Sin
+fmt	sin($exprn)
+docbgn
+Computes the sine of the specified argument (in radians.)
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	StateNo
+fmt	StateNo
+docbgn
+Returns the player's current state number. Useful for "move interrupts" in the CMD file.
+docend
+
+trigger	StateType
+fmt	StateType = $state_type
+docbgn
+StateType gives the player's state-type. Refer to the section
+on StateDef in the CNS documentation for more details on StateType.
+Useful for "move interrupts" in the CMD file.
+docend
+
+trigger	StageVar
+fmt	StageVar($param_name) = "$string"
+docbgn
+Returns information about the stage.
+A limited number of parameters are supported.
+
+info.author: Compares the value of the "author" parameter
+in the [Info] group. (boolean)
+info.displayname: Compares the value of the "displayname" parameter
+in the [Info] group. (boolean)
+info.name: Compares the value of the "name" parameter
+in the [Info] group. (boolean)
+
+In Ikemen-GO, StageVar accepts all stage parameters that ModifyStageVar can change. In addition it accepts the following parameters (nightly build only):
+stageinfo.localcoord.x = width (int)
+stageinfo.localcoord.y = height (int)
+docend
+
+trigger	SysFVar
+fmt	SysFVar($exprn)
+docbgn
+This trigger takes a mandatory variable number as an argument. It returns the value of the player's specified system float variable.
+This trigger should NOT be used under normal circumstances. System
+variables are reserved for bookkeeping in common1.cns.
+Returns bottom if exprn evaluates to bottom, or if exprn evaluates
+to an invalid variable index.
+docend
+
+trigger	SysVar
+fmt	SysVar($exprn)
+docbgn
+This trigger takes a mandatory variable number as an argument. It returns the value of the player's specified system int variable.
+This trigger is NOT to be used under normal circumstances. System
+variables are reserved for bookkeeping in common1.cns.
+Returns bottom if exprn evaluates to bottom, or if exprn evaluates
+to an invalid variable index.
+docend
+
+trigger	Tan
+fmt	tan($exprn)
+docbgn
+Computes the tangent of the specified argument (in radians.)
+Returns bottom if exprn evaluates to bottom.
+docend
+
+trigger	TeamMode
+fmt	TeamMode = $mode
+docbgn
+TeamMode gives the current mode of play for the player's team.
+In survival mode, TeamMode = turns on the enemy side.
+In Ikemen-GO, TeamMode can also return "Tag". TeamMode returns "Turns" during Ratio mode.
+docend
+
+trigger	TeamSide
+fmt	TeamSide
+docbgn
+Returns the team side the player is on. 1 represents P1 side (left), 2 for P2 side (right).
+docend
+
+trigger	TicksPerSecond
+fmt	TicksPerSecond
+docbgn
+Returns the number of ticks per second. Useful for time calculations.
+docend
+
+trigger	Time
+fmt	Time
+docbgn
+Returns the state-time of the player (that is, the number of ticks that the player has been in the current state so far).
+docend
+
+trigger	TimeMod
+fmt	TimeMod = $divisor, $value1
+docbgn
+Returns the remainder when the state-time of the player is divided by the specified value.
+The % operator subsumes the functionality of TimeMod, so it is recommended that you use % instead.
+Returns bottom if the divisor is 0.
+docend
+
+trigger	TopEdge
+fmt	TopEdge
+docbgn
+TopEdge returns the y position of the top edge of the screen, in absolute stage coordinates.
+This trigger is equivalent to the expression "Pos Y - ScreenPos Y".
+docend
+
+trigger	UniqHitCount
+fmt	UniqHitCount
+docbgn
+Returns the total number of hits the player's current attack move has done. This value is valid only for a single state; after any state change, it resets to 0. To prevent it from resetting to 0, set hitcountpersist in the StateDef (see cns documentation for details). The HitCount and UniqHitCount triggers differ only when the player is hitting more than one opponent. In the case where the player is hitting two opponents with the same attack, HitCount will increase by 1 for every hit, while UniqHitCount increases by 2.
+docend
+
+trigger	Var
+fmt	Var($exprn)
+docbgn
+This trigger takes a mandatory variable number as an argument. It returns the value of the player's specified int variable.
+Returns bottom if exprn evaluates to bottom, or if exprn evaluates
+to an invalid variable index.
+docend
+
+trigger	Vel
+fmt	Vel $X
+docbgn
+Gets the value of the player's velocity. You must specify the component that you want to check, eg. "Vel Y" to check the Y-velocity.
+For Vel X, a positive value indicates that the player is moving forward. (This behavior is the opposite of HitVel X's behavior.) For Vel Y, a positive value indicates that the player is moving downward.
+docend
+
+trigger	Win
+fmt	Win
+docbgn
+Returns true if the player (or the player's team, in team mode) has won the round, false otherwise. Can be suffixed with "KO", "Time", or "Perfect" to return true only when the round has been won by a KO, by time expiring, or with no life lost, respectively.
+docend
+
+trigger	WinKO
+fmt	WinKO
+docbgn
+Returns true if the player (or the player's team, in team mode) has won the round, false otherwise. Can be suffixed with "KO", "Time", or "Perfect" to return true only when the round has been won by a KO, by time expiring, or with no life lost, respectively.
+docend
+
+trigger	WinTime
+fmt	WinTime
+docbgn
+Returns true if the player (or the player's team, in team mode) has won the round, false otherwise. Can be suffixed with "KO", "Time", or "Perfect" to return true only when the round has been won by a KO, by time expiring, or with no life lost, respectively.
+docend
+
+trigger	WinPerfect
+fmt	WinPerfect
+docbgn
+Returns true if the player (or the player's team, in team mode) has won the round, false otherwise. Can be suffixed with "KO", "Time", or "Perfect" to return true only when the round has been won by a KO, by time expiring, or with no life lost, respectively.
+docend
+
+sctrl	AssertCommand	ikgo
+req	name	string
+opt	buffer.time	0
+docbgn
+This controller allows (de)activating the player's commands without any button presses. If the player has multiple commands with the same name, the controller will affect all of them.
+docend
+
+sctrl	AssertInput	ikgo
+req	flag	string
+opt	flag2	string
+opt	flag3	string
+docbgn
+This controller allows you to assert up to three input flags simultaneously via single sctrl. Similarly to AssertSpecial, there is no limit how many times this controller is called. Each flag will be automatically "de-asserted" at every game tick, so you must assert a flag for each tick that you want it to be active. Ikemen interprets input flags the same was as if corresponding input keys were pressed.
+The flag name can be one of the following input keys (case sensitive):
+U, D, L, R, a, b, c, x, y, z, s, d, w, m
+docend
+
+sctrl	Camera	ikgo
+req	view	string
+opt	pos	0.0	0.0
+opt	followID	0
+docbgn
+**This SCTRL is still experimental and subject to possible changes, there is no guarantee this will be supported as is in future IKEMEN Go versions.**
+Changes the camera position and the way players interact with screen and stage edges.
+When in Free view, Screenbound and Movecamera will not influence camera or char positions. Follow view will only be influenced by Screenbound/Movecamera from the player being followed (this might change in the future).
+docend
+
+sctrl	Dialogue	ikgo
+req	textX	string
+opt	hidebars	0
+opt	force	0
+docbgn
+Assigns dialogue data to be displayed either right before the lifebar calls the fight during first round (last frame of  RoundState = 1) or at the last active frame of the final round (RoundState = 4, right before screen starts fading out). If more than 1 player calls this sctrl, who will end up initiating dialogue is chosen randomly.
+How the rendered dialogue will look like (positioning, default face sprites, background definition, default time between text etc.) is controlled by `[Dialogue Info]` screenpack parameters (refer to system.def distributed with engine for a working example). By default player who called the state controller will use screenpack parameters prefixed with *p1* and his *enemy(0)* will be assigned to use *p2* parameters (this is adjustable via text tokens).
+With appropriate screenpack parameters it's possible to skip to the next *text* parameter during dialogue via button press, without ending it all together. If this screenpack group is missing, dialogue won't be initiated at all (`enabled` parameter defaults to 0).
+**Optional text tokens**
+Tokens prefixed with *pX* (where X is 1 or 2) refers to screenpack `[Dialogue Info]` parameters prefixed the same way. Some tokens accepts *redirection* argument that points to which player assets (sprite, sound, anim, state) should be used.
+Following redirection are supported:
+- `self`: redirects to player that called the sctrl
+- `playerno(X)`: redirects to [playerno](Triggers-(new)/#new_playerno) X
+- `enemy(X)`: redirects to enemy X of the player that called the sctrl (defaults to 0, the first enemy, if bracket is ommiteed)
+- `partner(X)`: redirects to partner X of the player that called the sctrl (defaults to 0, the first partner, if bracket is ommiteed)
+- `enemyname(name)`: redirects to the enemy with matching name (the internal `name` parameter specified in .DEF file)
+- `partnername(name)`: redirects to the partner with matching name (the internal `name` parameter specified in .DEF file)
+Token list:
+- `<pX>`: changes which dialogue box side (replace X with 1 or 2) should be used to render text. Defaults to p1 side.
+- `<pXname=name>`: changes pX side name displayed during dialogue to the string within quotation marks
+- `<pXname=redirection>`: changes pX side name displayed during dialogue to the redirected player displayname (as specified in displayname parameter within the .DEF file)
+- `<pXface=redirection,group_no,sprite_no>`: changes pX side sprite group and index that should be used to render face portrait. Defaults to sprite numbers assigned via screenpack (also defaults to these numbers if specified ones are missing, unless *group_no* is set to -1 - in such case face rendering is completely disabled).
+- `<sound=redirection,group_no,sound_no,volumescale>`: plays back a sound. *volumescale* argument is optional (defaults to 100).
+- `<anim=redirection,anim_no>`: changes the action number of the player's animation
+- `<state=redirection,state_no>`: changes the state number of the player
+- `<map=redirection,map_name,value,map_type>`: modifies player's map. *map_type* controls what kind of operation on map should be performed (`set`: equivalent of [MapSet](State-controllers/#new_mapset), `add`: equivalent of [MapAdd](State-controllers/#new_mapadd)),
+- `<displayname=redirection>`: part of the dialogue text replaced automatically with redirected player displayname (as specified in displayname parameter within the .DEF file)
+- `<wait=ticks>`: amount of ticks delay before sctrl resume further text parameter parsing
+As an example, below code showcases Symphony of the Night (in)famous cutscene recreated with Dialogue sctrl, using various advanced tokens (keep in mind that in most cases, when you don't have to switch face sprites, play voiceovers or adjust timings, the only commonly used *text* token is `<pX>`)
+Click on the image to watch the video corresponding to below code.
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/BbUnJT9KnnU/0.jpg)](http://www.youtube.com/watch?v=BbUnJT9KnnU "Ikemen GO SotN cutscene")
+docend
+
+sctrl	DizzySet	ikgo
+req	value	0
+docbgn
+Sets the player's Dizzy flag. For the duration that this flag is set, combo hit counter does not reset and the combo count lifebar text will stay on screen.
+docend
+
+sctrl	DizzyPointsAdd	ikgo
+req	value	0
+docbgn
+Adds the specified amount to the player's dizzy points.
+docend
+
+sctrl	DizzyPointsSet	ikgo
+req	value	0
+docbgn
+Sets the amount of dizzy points that the player has.
+docend
+
+sctrl	GetHitVarSet	ikgo
+docbgn
+[TODO]
+Changes a player's `GetHitVar` directly, without requiring a hit.
+Supported parameters: airtype, animtype, attr, chainid, ctrltime, fall, fall.damage, fall.envshake.ampl, fall.envshake.freq, fall.envshake.mul, fall.envshake.phase, fall.envshake.time, fall.kill, fall.recover, fall.recovertime, fall.xvel, fall.yvel, fallcount, groundtype, guarded, hitshaketime, hittime, ID, playerno, recovertime, slidetime, xvel, yaccel, yvel
+docend
+
+sctrl	GroundLevelOffset	ikgo
+req	value	0.0
+docbgn
+Applies a temporary offset to the player's ground level, which is otherwise 0. This makes the player treat a different position as `pos y = 0`, and therefore allows coding features such as platforms.
+docend
+
+sctrl	GuardBreakSet	ikgo
+req	value	0
+docbgn
+Sets the player's Guard Break flag.
+docend
+
+sctrl	GuardPointsAdd	ikgo
+req	value	0
+docbgn
+Adds the specified amount to the player's guard points.
+docend
+
+sctrl	GuardPointsSet	ikgo
+req	value	0
+docbgn
+Sets the amount of guard points that the player has.
+docend
+
+sctrl	Height	ikgo
+req	value	0
+docbgn
+Temporarily changes the vertical size of the player's "push box" for 1 frame. Similar to Width in function: the values are added to the height, as defined in the player's constants file—they do not override them. A positive value will make the box larger, and a negative one will make it smaller.
+docend
+
+sctrl	LifebarAction	ikgo
+opt	top	0
+opt	time	0
+opt	timemul	0.0
+opt	anim	0
+opt	spr	0	0
+opt	snd	0	0
+opt	text	string
+docbgn
+Displays text/sprites/anims synchronized with each other, using [lifebar data](Lifebar-features/#new_action). The intended use case is implementation of messages, often found in commercial fighting games.
+Refer to *data/action.zss* file and default lifebar distributed with engine for a working example.
+docend
+
+sctrl	LoadFile	ikgo
+req	savedata	string
+req	path	string
+docbgn
+Loads the specified data and overrides the data of the execution character. Note that all the data before reading will disappear.
+docend
+
+sctrl	MapAdd	ikgo
+req	map	string
+req	value	0
+docbgn
+Adds value to player's map.
+docend
+
+sctrl	MapSet	ikgo
+req	map	string
+req	value	0
+docbgn
+Sets value to player's map. This state controller can be used to change a number that has already been set via character's DEF file or to set a new map.
+docend
+
+sctrl	MatchRestart	ikgo
+opt	pXdef	string
+opt	stagedef	string
+opt	reload	0
+docbgn
+Reset the round or match and resume. By default (when no optional parameters are set) has the same effect as F4 debug key (round restart). Optionally allows characters and stage reloading, which also changes the state controller functionality to work like shift+F4 debug key (match restart).
+docend
+
+sctrl	ModifyBGCtrl	ikgo
+req	id	0
+opt	time	0
+opt	value	0
+opt	x	0.0
+opt	y	0.0
+docbgn
+Modifies the parameters of an existing stage [background controller](http://www.elecbyte.com/mugendocs/bgs.html#background-controllers).
+docend
+
+sctrl	ModifyBgm	ikgo
+opt	volume	0
+opt	loopstart	0
+opt	loopend	0
+opt	position	0
+opt	freqmul	0.0
+opt	loopcount	0
+docbgn
+Modifies currently playing music.
+docend
+
+sctrl	ModifyHitDef	ikgo
+docbgn
+Using this state controller will update the specified parameters of the player's currently active `HitDef`. Has no effect if no `HitDef` is active.
+docend
+
+sctrl	ModifyPlayer	ikgo
+opt	displayname	string
+opt	lifebarname	string
+opt	lifemax	0
+opt	powermax	0
+opt	dizzypointsmax	0
+opt	guardpointsmax	0
+opt	teamside	0
+opt	helperID	0
+opt	helpername	0
+docbgn
+Allows changing some character parameters that are otherwise out of reach. This state controller should be used with care.
+Note: This state controller was briefly named `ModifyChar` during development.
+docend
+
+sctrl	ModifyProjectile	ikgo
+opt	ID	0
+opt	index	0
+docbgn
+Using this state controller will update the specified parameters for the projectiles with the specified `ID`. Syntax is essentially the same as for `Projectile`.
+docend
+
+sctrl	ModifyReversalDef	ikgo
+docbgn
+Using this state controller will update the specified parameters of the player's currently active `ReversalDef`. Has no effect if no `ReversalDef` is active.
+docend
+
+sctrl	ModifySnd	ikgo
+opt	channel	0
+opt	volume	0
+opt	volumescale	0
+opt	freqmul	0.0
+opt	pan	0.0
+opt	abspan	0.0
+opt	priority	0
+opt	loopstart	0
+opt	loopend	0
+opt	position	0
+opt	loop	0
+opt	loopcount	0
+docbgn
+Modifies the following sound parameters on-the-fly. This cannot modify the `lowpriority` parameter. If you need your sound to be low priority, call PlaySnd with the respective parameter set.
+docend
+
+sctrl	ModifyStageVar	ikgo
+opt	camera.ytension.enable	0
+opt	camera.boundleft	0
+opt	camera.boundright	0
+opt	camera.boundhigh	0
+opt	camera.boundlow	0
+opt	camera.verticalfollow	0.0
+opt	camera.floortension	0
+opt	camera.tensionhigh	0
+opt	camera.tensionlow	0
+opt	camera.tension	0
+opt	camera.startzoom	0.0
+opt	camera.zoomout	0.0
+opt	camera.zoomin	0.0
+opt	camera.zoomindelay	0.0
+opt	camera.zoominspeed	0.0
+opt	camera.zoomoutspeed	0.0
+opt	camera.tensionvel	0.0
+opt	camera.cuthigh	0.0
+opt	camera.cutlow	0.0
+opt	camera.yscrollspeed	0.0
+opt	camera.ytension.enable	0
+opt	camera.autocenter	0
+opt	playerinfo.leftbound	0.0
+opt	playerinfo.rightbound	0.0
+opt	scaling.topscale	0.0
+opt	bound.screenleft	0
+opt	bound.screenright	0
+opt	stageinfo.zoffset	0
+opt	stageinfo.zoffsetlink	0
+opt	stageinfo.xscale	0.0
+opt	stageinfo.yscale	0.0
+opt	shadow.intensity	0
+opt	shadow.color	0
+opt	shadow.yscale	0.0
+opt	shadow.fade.range	0
+opt	shadow.xshear	0.0
+opt	shadow.offset	0.0
+opt	reflection.intensity	0
+opt	reflection.yscale	0.0
+opt	reflection.offset	0.0
+docbgn
+This SCTRL lets a character modify basic stage parameters or "stage vars", as declared in the stage .def file. Not all parameters are modifable for now, but the SCTRL could be expanded in the future to allow it.
+camera.ytension.enable is enabled by default when a stage uses tensionhigh and tensionlow.
+docend
+
+sctrl	ParentMapAdd	ikgo
+req	map	string
+req	value	0
+docbgn
+If the player is a helper, adds value to parent's map. If the player is not a helper, this controller does nothing. Parent refers to the instance that spawned the helper.
+docend
+
+sctrl	ParentMapSet	ikgo
+req	map	string
+req	value	0
+docbgn
+If the player is a helper, sets value to parent's map. If the player is not a helper, this controller does nothing. Parent refers to the instance that spawned the helper.
+docend
+
+sctrl	PlayBgm	ikgo
+opt	bgm	string
+opt	loop	0
+opt	volume	0
+opt	loopstart	0
+opt	loopend	0
+opt	startposition	0
+opt	freqmul	0.0
+opt	loopcount	0
+docbgn
+Plays back a music. Supported file formats: *mp3*, *ogg*, *wav*.
+docend
+
+sctrl	PrintToConsole	ikgo
+req	text	string
+opt	params	...
+docbgn
+This controller is only useful for debugging. PrintToConsole prints a specified message to debug mode console, as well as terminal / command line window, if it's opened.
+The syntax is the same as DisplayToClipboard:
+docend
+
+sctrl	RedLifeAdd	ikgo
+req	value	0
+opt	absolute	0
+docbgn
+Adds the specified amount to the player's red life, scaled by the player's defense multiplier if necessary.
+docend
+
+sctrl	RedLifeSet	ikgo
+req	value	0
+docbgn
+Sets the amount of red life that the player has.
+docend
+
+sctrl	RemapSprite	ikgo
+opt	reset	0
+opt	preset	string
+opt	source	0	0
+opt	dest	0	0
+docbgn
+Remaps one sprite with another (or does this for multiple sprites at once, based on character's CNS [RemapPreset](Character-features/#cns_remappreset) data)
+docend
+
+sctrl	RemoveText	ikgo
+opt	ID	0
+docbgn
+Removes all of a player's texts, or just the texts with a specified ID number.
+docend
+
+sctrl	RootMapAdd	ikgo
+req	map	string
+req	value	0
+docbgn
+If the player is a helper, adds value to root's map. If the player is not a helper, this controller does nothing. Root refers to the main player.
+docend
+
+sctrl	RootMapSet	ikgo
+req	map	string
+req	value	0
+docbgn
+If the player is a helper, sets value root's map. If the player is not a helper, this controller does nothing. Root refers to the main player.
+docend
+
+sctrl	RootVarAdd	ikgo
+req	v	0
+req	fv	0
+req	value	0
+opt	var($var_no)	0
+opt	fvar($var_no)	0
+docbgn
+If the player is a helper, adds value to root's working variables. Either a float variable or an int variable can be added by this controller. If the player is not a helper, this controller does nothing. Root refers to the main player.
+docend
+
+sctrl	RootVarSet	ikgo
+req	v	0
+req	fv	0
+req	value	0
+opt	var($var_no)	0
+opt	fvar($var_no)	0
+docbgn
+If the player is a helper, sets value root's working variables. Either a float variable or an int variable can be set by this controller. If the player is not a helper, this controller does nothing. Root refers to the main player.
+docend
+
+sctrl	RoundTimeAdd	ikgo
+req	value	0
+docbgn
+Add specified amount of ticks into round time.
+docend
+
+sctrl	RoundTimeSet	ikgo
+req	value	0
+docbgn
+Set round time to specified amount of ticks.
+docend
+
+sctrl	SaveFile	ikgo
+req	savedata	string
+req	path	string
+docbgn
+Put specified data together and save it as binary. It uses gob, which is a serialized format for Go language, as the storage format. All characters specified by the character or helper who executed the function are stored at that time.
+docend
+
+sctrl	ScoreAdd	ikgo
+req	value	0.0
+docbgn
+Adds the specified amount of points to P1 current score counter.
+docend
+
+sctrl	ShadowOffset	ikgo
+opt	x	0.0
+opt	y	0.0
+opt	z	0.0
+opt	reflection	0
+docbgn
+Changes shadow or reflection position.
+docend
+
+sctrl	TagIn	ikgo
+opt	ctrl	0
+opt	leader	0
+opt	partnerctrl	0
+docbgn
+Makes the P1 and/or the specified partner exit Standby state. If no parameters are given it affects the player that called it. (Also affects helpers)
+*All [TagOut](State-controllers/#new_tagout) parameters work with some extra ones specified bellow*
+**Example:**
+docend
+
+sctrl	TagOut	ikgo
+opt	self	0
+opt	partner	0
+opt	stateno	0
+opt	partnerstateno	0
+docbgn
+Makes the the player and/or the specified partner enter Standby state. If no parameters are given it affects the player that called it. (Also affects helpers)
+**Example:**
+docend
+
+sctrl	TargetAdd	ikgo
+req	PlayerID	0
+docbgn
+Adds the player with the specified ID to the original player's target list.
+Do not confuse this player ID with a target ID. Target ID can be assigned with `chainID` parameter of [GetHitVarSet](State-controllers-(new)/#new_gethitvarset).
+docend
+
+sctrl	TargetDizzyPointsAdd	ikgo
+req	value	0
+opt	ID	0
+docbgn
+Adds the specified amount to all targets' dizzy points.
+docend
+
+sctrl	TargetGuardPointsAdd	ikgo
+req	value	0
+opt	ID	0
+docbgn
+Adds the specified amount to all targets' guard points.
+docend
+
+sctrl	TargetRedLifeAdd	ikgo
+req	value	0
+opt	ID	0
+opt	absolute	0
+docbgn
+Adds the specified amount to all targets' red life, scaled by the targets' defense multipliers if necessary.
+docend
+
+sctrl	TargetScoreAdd	ikgo
+req	value	0.0
+opt	ID	0
+docbgn
+Adds the specified amount of points to targets' current score counter.
+docend
+
+sctrl	TeamMapAdd	ikgo
+req	map	string
+req	value	0
+docbgn
+Adds value to all team members maps.
+docend
+
+sctrl	TeamMapSet	ikgo
+req	map	string
+req	value	0
+docbgn
+Sets value to all team members maps.
+docend
+
+sctrl	Text	ikgo
+opt	removetime	0
+opt	layerno	0
+opt	localcoord	0	0
+opt	text	string
+opt	params	...
+opt	font	0
+opt	bank	0
+opt	align	0
+opt	pos	0	0
+opt	scale	0.0	0.0
+opt	color	0	0	0
+opt	id	0
+opt	linepsacing	0.0
+opt	textdelay	0.0
+opt	velocity	0.0	0.0
+opt	accel	0.0	0.0
+opt	friction	0.0	0.0
+docbgn
+Text controller is used for displaying text on screen.
+docend
+
+sctrl	TransformClsn	ikgo
+opt	scale	0.0	0.0
+opt	angle	0.0
+docbgn
+Changes the geometry or certain properties of the player's collision boxes.
+docend
+
+trigger	AiLevelF	ikgo
+fmt	AILevelF
+docbgn
+Returns the difficulty level of the player's AI as float value (unlike *AILevel* trigger, which is still floored for compatibility reasons). If AI is enabled on the player, the value ranges from 1 (easiest) to 8 (most difficult). If AI is not enabled on the player, the return value is 0. AI difficulty level with floating point is a result of AI Ramping system (refer to select.def distributed with engine for more information)
+docend
+
+trigger	AirJumpCount	ikgo
+fmt	AirJumpCount
+docbgn
+Returns the number of (conventional) air jumps the P1 has performed.
+docend
+
+trigger	Alpha	ikgo
+fmt	Alpha $argument
+docbgn
+Returns the value of the player's source/dest alpha applied with Trans sctrl.
+docend
+
+trigger	Angle	ikgo
+fmt	Angle
+docbgn
+Returns the value of the player's angle applied with AngleDraw/AngleSet/AngleAdd/AngleMul sctrl.
+docend
+
+trigger	AnimFrame	ikgo
+fmt	AnimFrame($param_name)
+docbgn
+Returns information about the player's current animation frame as defined in the AIR file. Refer to the AIR file documentation for what each parameter means.
+docend
+
+trigger	AnimPlayerNo	ikgo
+fmt	AnimPlayerNo
+docbgn
+Returns the player number of the owner of the player's current animation.
+Normally returns the same number as the player's player number, but when for instance `ChangeAnim2` is used in a custom state, it will return the number of who owns that animation.
+docend
+
+trigger	Attack	ikgo
+fmt	Attack
+docbgn
+Returns P1 current attack value.
+docend
+
+trigger	AnimLength	ikgo
+fmt	AnimLength
+docbgn
+Returns total length of the P1 current animation.
+docend
+
+trigger	Atan2	ikgo
+fmt	Atan2($exp1,$exp2)
+docbgn
+Takes two arguments, and returns the arc tangent of the two specified arguments.
+docend
+
+trigger	BgmVar	ikgo
+fmt	BGMVar
+docbgn
+Allows checking the length, loopstart, loopend, position, startposition, volume, and filename of the currently playing BGM.
+docend
+
+trigger	BotBoundDist ikgo
+fmt	BotBoundDist
+docbgn
+BotBoundDist gives the distance between the player's z-axis and the BotBound value of the stage.
+docend
+
+trigger	Clamp	ikgo
+fmt	Clamp($value,$min,$max)
+docbgn
+Takes three arguments, returns a value clamped to an inclusive range of two specified arguments.
+docend
+
+trigger	ClsnOverlap	ikgo
+fmt	ClsnOverlap($box_type_1, playerID, $box_type_2)
+docbgn
+Returns true if the player's specified collision box type is overlapping another player's collision boxes.
+This trigger uses Ikemen's internal collision detection, so it will work even with angled and rescaled boxes.
+docend
+
+trigger	ClsnVar	ikgo
+fmt	ClsnVar($value_type,$index,$elem)
+docbgn
+Returns the specified CLSN coordinate from the specified CLSN index. Back always returns the back coordinate, and front always returns the front coordinate, even if they are reversed in the .AIR file. All coordinates are in the same coordinate space as .AIR.
+docend
+
+trigger	ComboCount	ikgo
+fmt	ComboCount
+docbgn
+Returns the total number of hits done by the player's side in the currently ongoing combo. This value is valid as long as the opposite team combo count stays above 0, otherwise it returns 0 too. Returned value always matches current combo counter tracked by lifebar.
+docend
+
+trigger	ConsecutiveWins	ikgo
+fmt	ConsecutiveWins
+docbgn
+Returns number of matches won consecutively by this team side. The counter increases for the winning team at the same time MatchOver trigger starts returning 1. Losing a round resets the counter to 0 and prevents increment for this match.
+docend
+
+trigger	Const1080p	ikgo
+fmt	Const1080p($exprn)
+docbgn
+Converts a value from the 1080p coordinate space to the player's coordinate space. The conversion ratio between coordinate spaces is the ratio of their widths.
+docend
+
+trigger	Deg	ikgo
+fmt	Deg($exp)
+docbgn
+Converts an argument value from radians to degrees.
+docend
+
+trigger	Defence	ikgo
+fmt	Defence
+docbgn
+Returns the player's current defence value. This value accounts for all defence multipliers.
+docend
+
+trigger	DisplayName	ikgo
+fmt	DisplayName = "$name"
+docbgn
+Returns the player's displayed name. Note that the lifebar name is not necessarily the same.
+docend
+
+trigger	Dizzy	ikgo
+fmt	Dizzy
+docbgn
+Returns 1 if character is under [dizzy effect](Miscellaneous-Info/#dizzy) (assigned by [DizzySet](State-controllers-(new)/#new_dizzyset) sctrl).
+docend
+
+trigger	DizzyPoints	ikgo
+fmt	DizzyPoints
+docbgn
+Returns the amount of [dizzy points](Character-features/#dizzypoints) the player has.
+docend
+
+trigger	DizzyPointsMax	ikgo
+fmt	DizzyPointsMax
+docbgn
+Returns the maximum amount of [dizzy points](Character-features/#dizzypoints) the player can have. This is normally the same value as LifeMax (adjustable in character's CNS `[Data]` section).
+docend
+
+trigger	DrawPalNo	ikgo
+fmt	DrawPalNo
+docbgn
+[TODO] Undocumented trigger.
+docend
+
+trigger	EnvShakeVar	ikgo
+fmt	EnvShakeVar
+docbgn
+Allows checking the (remaining) time, frequency and amplitude of the current EnvShake.
+docend
+
+trigger	ExplodVar	ikgo
+fmt	ExplodVar($id, $index, $param)
+docbgn
+Returns the specified explod parameter. Use -1 for ID to iterate over all explods.
+docend
+
+trigger	FightScreenVar	ikgo
+fmt	FightScreenVar($param_name)
+docbgn
+Returns information about the fight screen (commonly referred to as "lifebars").
+Refer to lifebar documentation and examples for the function of each argument.
+docend
+
+trigger	FightTime	ikgo
+fmt	FightTime
+docbgn
+Returns the amount of ticks since the start of the actual fight.
+docend
+
+trigger	FirstAttack	ikgo
+fmt	FirstAttack
+docbgn
+Returns 1 if this character has landed the first attack (before any of the opponents or team partners) in the current round. Otherwise returns 0.
+docend
+
+trigger	Float	ikgo
+fmt	Float($exp)
+docbgn
+Converts argument evaluating to int type into float type.
+docend
+
+trigger	GameMode	ikgo
+fmt	GameMode = "$name"
+docbgn
+Returns the current game mode.
+The following game modes are detectable by default:
+- arcade
+- bonus
+- bossrush
+- demo
+- freebattle
+- netplaysurvivalcoop
+- netplayteamcoop
+- netplayversus
+- randomtest
+- survival
+- survivalcoop
+- teamcoop
+- timeattack
+- training
+- versus
+- versuscoop
+- watch
+The trigger can be also used to detect [story mode arcs](Miscellaneous-Info/#arcs) and modes added via [external modules](Miscellaneous-Info/#lua_modules).
+docend
+
+trigger	GameOption	ikgo
+fmt	GameOption
+docbgn
+Allows checking the various game options as defined in config.ini (TBD)
+docend
+
+trigger	GroundAngle	ikgo
+fmt	GroundAngle
+docbgn
+TODO: ? Related to undocumented [PlatformAngle](State-controllers-(changed)/#changed_projectile_platformangle) projectile parameter.
+docend
+
+trigger	GroundLevel	ikgo
+fmt	GroundLevel
+docbgn
+Returns the character's ground level, which is normally 0 but can be changed via [GroundLevelOffset](State-controllers-(new)/#new_groundleveloffset).
+docend
+
+trigger	GuardBreak	ikgo
+fmt	GuardBreak
+docbgn
+Returns 1 if character is under [guard break](Miscellaneous-Info/#guardbreak) (assigned by [GuardBreakSet](State-controllers-(new)/#new_guardbreakset) sctrl).
+docend
+
+trigger	GuardCount	ikgo
+fmt	GuardCount
+docbgn
+Returns how many hits of the current attack were guarded. Similar to Hitcount.
+docend
+
+trigger	GuardPoints	ikgo
+fmt	GuardPoints
+docbgn
+Returns the amount of [guard points](Character-features/#guardpoints) the player has.
+docend
+
+trigger	GuardPointsMax	ikgo
+fmt	GuardPointsMax
+docbgn
+Returns the maximum amount of [guard points](Character-features/#guardpoints) the player can have. This is normally the same value as LifeMax (adjustable in character's CNS `[Data]` section).
+docend
+
+trigger	HelperID	ikgo
+fmt	HelperID
+docbgn
+Returns the helper's ID (assigned via `Helper` ID parameter).
+Not to be confused with plain `ID`.
+docend
+
+trigger	HelperIndexExist	ikgo
+fmt	HelperIndexExist
+docbgn
+Returns 1 if a player's helper with the specified index number exists, or 0 otherwise.
+docend
+
+trigger	HelperName	ikgo
+fmt	HelperName = "$name"
+docbgn
+Returns the helper's name (assigned via helper's name parameter, which defaults to "\<parent\>'s helper" if a unique name is not assigned).
+docend
+
+trigger	HitDefVar	ikgo
+fmt	HitDefVar($param)
+docbgn
+Returns information about the player's currently active HitDef or ReversalDef. The parameter format is the same as in the `HitDef` state controller.
+docend
+
+trigger	HitOverridden	ikgo
+fmt	HitOverridden
+docbgn
+Returns 1 during frame in which player has overridden default gethit behavior via HitOverride state controller. Otherwise returns 0.
+docend
+
+trigger	IkemenVersion	ikgo
+fmt	IkemenVersion
+docbgn
+Returns the character's Ikemen version as a float.
+For example, a character with `ikemenversion = 0.98.2` in its DEF file will have `IkemenVersion` return `0.982000`.
+docend
+
+trigger	InCustomAnim	ikgo
+fmt	InCustomAnim
+docbgn
+Returns 1 if the character is in a custom animation, such as when `ChangeAnim2` is used in a custom state.
+docend
+
+trigger	InCustomState	ikgo
+fmt	InCustomState
+docbgn
+Returns 1 if the character is in a custom state (sent into another player's state).
+docend
+
+trigger	Index	ikgo
+fmt	Index
+docbgn
+Returns the player's index as an integer. See [PlayerIndex](Triggers-(new)/#redirection_playerindex).
+docend
+
+trigger	InDialogue	ikgo
+fmt	InDialogue
+docbgn
+Returns 1 during ongoing dialogue initiated by [Dialogue](State-controllers-(new)/#new_dialogue) state controller.
+docend
+
+trigger	InputTime	ikgo
+fmt	InputTime($button)
+docbgn
+Returns number of frames since a given button was pressed or released. A positive number means the button is being held, while a negative number means it has been released. For players without `keyctrl`, it returns 0.
+This time advances regardless of the player being paused.
+docend
+
+trigger	IntroState	ikgo
+fmt	IntroState
+docbgn
+Adds a series of checks during the fight's intro.
+docend
+
+trigger	IsAsserted	ikgo
+fmt	IsAsserted($flag_name)
+docbgn
+Returns 1 if the character has specified AssertSpecial state controller flag asserted. Flags that affect all characters at once don't have to be asserted directly by character to be detectable.
+docend
+
+trigger	IsHost	ikgo
+fmt	IsHost
+docbgn
+Returns if the player is host in online match.
+docend
+
+trigger	JugglePoints	ikgo
+fmt	JugglePoints($exprn)
+docbgn
+Returns the remaining juggle points between the player and another player with the specified ID. If the specified ID is not yet a target of the first player, the trigger will simply return the maximum juggle points.
+docend
+
+trigger	LastPlayerID	ikgo
+fmt	LastPlayerID
+docbgn
+Returns the ID number of the last spawned player or helper.
+docend
+
+trigger	LayerNo	ikgo
+fmt	LayerNo
+docbgn
+Returns the layer number on which the character is currently being drawn on.
+docend
+
+trigger	Lerp	ikgo
+fmt	Lerp($a,$b,$amount)
+docbgn
+Linear interpolation. Takes three arguments, and returns a number between two specified arguments at a specific increment.
+docend
+
+trigger	LocalCoord	ikgo
+fmt	LocalCoord $X
+docbgn
+Returns the character's `localcoord` as a float. This trigger returns a constant value even when the player is in a custom state.
+docend
+
+trigger	Map	ikgo
+fmt	Map($name)
+docbgn
+Use the name of the map you want to recognize in parentheses. For example, a character with the below map will return Map(age) as a value set in character DEF file or via various state controllers that can modify character's map. If nothing is set, 0 is returned.
+docend
+
+trigger	Max	ikgo
+fmt	Max($exp1,$exp2)
+docbgn
+Takes two arguments, and returns the highest-valued number.
+docend
+
+trigger	MemberNo	ikgo
+fmt	MemberNo
+docbgn
+Returns character's team member position. Team leader is 1, partners receive successive numbers.
+docend
+
+trigger	Min	ikgo
+fmt	Min($exp1,$exp2)
+docbgn
+Takes two arguments, and returns the lowest-valued number.
+docend
+
+trigger	MoveCountered	ikgo
+fmt	MoveCountered
+docbgn
+This trigger is valid only when the player is in an attack state. MoveCountered returns 1 on attack contact, at the exact frame that p1 interrupts p2 attack (true for 1 frame, even if both P1 and P2 countered each other's moves). After contact, MoveCountered's return value will increase by 1 for each game tick that P1 is not paused. It gives 0 otherwise. See Details section of Mugen's `MoveContact` trigger for more information.
+docend
+
+trigger	MoveHitVar	ikgo
+fmt	MoveHitVar
+docbgn
+Similarly to `GetHitVar`, this trigger allows retrieving information about the last hit the player inflicted.
+This trigger works even if that hit acquired no `target`.
+### <a name="new_movehitvar_cornerpush">cornerpush</a> (nightly build only)
+Returns the velocity offset inflicted by cornerpush. (float)
+### <a name="new_movehitvar_frame">frame</a> (nightly build only)
+Returns true only during the same frame where the player connected an attack. (bool)
+Unlike `MoveHit`, this trigger updates during a hitpause.
+### <a name="new_movehitvar_id">id</a> (nightly build only)
+Returns ID of the last player hit by the HitDef. (int)
+### <a name="new_movehitvar_overridden">overridden</a> (nightly build only)
+Returns true if the last hit encountered a HitOverride. (bool)
+### <a name="new_movehitvar_playerno">playerno</a> (nightly build only)
+Returns the player number of the last player hit by the HitDef. (int)
+### <a name="new_movehitvar_sparkx">sparkx</a> (nightly build only)
+Returns the horizontal offset of the hitsparks created by the Hitdef, in relation to the attacking player's position. (float)
+### <a name="new_movehitvar_sparky">sparky</a> (nightly build only)
+Returns the vertical offset of the hitsparks created by the Hitdef, in relation to the attacking player's position. (float)
+### <a name="new_movehitvar_uniqhit">uniqhit</a> (nightly build only)
+Returns the number of players the last hit connected against. (int)
+docend
+
+trigger	MugenVersion	ikgo
+fmt	MugenVersion
+docbgn
+Returns the characer's Mugen version as a float.
+Returns 1.1 for characters with an Ikemen version, regardless of what's specified in the def file.
+Currently returns 0.5 for WinMugen characters, but checking if version is < 1.0 is better advised.
+MugenVersion >= 1.0 is equivalent to MajorVersion.
+docend
+
+trigger	NumPlayer	ikgo
+fmt	NumPlayer
+docbgn
+Returns the number of main players in the game (helpers, attached chars, etc are ignored).
+docend
+
+trigger	NumText	ikgo
+fmt	2.NumText($exprn)
+docbgn
+This trigger takes an ID number as an optional argument. If the ID number is omitted, NumText returns the number of texts owned by the player. If the ID number is included, then NumText returns the number of texts with that ID number that are owned by the player. The ID number must be greater than -1. An ID number of -1 or less will give the same behavior as if the ID number is omitted.
+docend
+
+trigger	Offset	ikgo
+fmt	OffSet $argument
+docbgn
+Returns the value of the player's x,y offset applied with OffSet sctrl.
+docend
+
+trigger	P5Name	ikgo
+fmt	P5Name = "$name"
+docbgn
+Same as P1Name-P4Name, except that these return the name of other team members, if present. If there is no such opponent, then it returns 0 no matter what name is specified. Similarly, P5Name != "name" will return 1 no matter what name is specified.
+docend
+
+trigger	P6Name	ikgo
+fmt	P6Name = "$name"
+docbgn
+Same as P1Name-P4Name, except that these return the name of other team members, if present. If there is no such opponent, then it returns 0 no matter what name is specified. Similarly, P5Name != "name" will return 1 no matter what name is specified.
+docend
+
+trigger	P7Name	ikgo
+fmt	P7Name = "$name"
+docbgn
+Same as P1Name-P4Name, except that these return the name of other team members, if present. If there is no such opponent, then it returns 0 no matter what name is specified. Similarly, P5Name != "name" will return 1 no matter what name is specified.
+docend
+
+trigger	P8Name	ikgo
+fmt	P8Name = "$name"
+docbgn
+Same as P1Name-P4Name, except that these return the name of other team members, if present. If there is no such opponent, then it returns 0 no matter what name is specified. Similarly, P5Name != "name" will return 1 no matter what name is specified.
+docend
+
+trigger	PalFXVar	ikgo
+fmt	PalFXVar
+docbgn
+[TODO] Returns information about the player, background or global ("all") PalFX. Accepted parameters:
+time
+add.r, add.g, add.b
+mul.r, mul.g, mul.b
+color, hue, invertall, invertblend
+bg.time
+bg.add.r, bg.add.g, bg.add.b
+bg.mul.r, bg.mul.g, bg.mul.b
+bg.color, bg.hue, bg.invertall
+all.time
+all.add.r, all.add.g, all.add.b
+all.mul.r, all.mul.g, all.mul.b
+all.color, all.hue, all.invertall, all.invertblend
+docend
+
+trigger	PauseTime	ikgo
+fmt	PauseTime
+docbgn
+Returns the time until the active Pause and/or SuperPause effect expires (whichever lasts longer). The non 0 value is returned only after movetime parameter of these sctrls expires (player can no longer move).
+Normally states are not running during Pause and SuperPause, so this trigger will only work when used in a special statedef -4, which ignores these state controllers.
+docend
+
+trigger	Physics	ikgo
+fmt	Physics = $physics_type
+docbgn
+Returns the player's physics-type. Refer to the section on StateDef in the CNS documentation for more details on physics.
+docend
+
+trigger	PlayerCount	ikgo
+fmt	PlayerCount
+docbgn
+Returns total number of players (including helpers, attached chars, etc) existing ingame.
+docend
+
+trigger	PlayerIndexExist	ikgo
+fmt	PlayerIndexExist
+docbgn
+Returns 1 if a player with the specified index number exists, 0 otherwise. See [PlayerIndex](Triggers-(new)/#redirection_playerindex).
+docend
+
+trigger	PlayerNo	ikgo
+fmt	PlayerNo
+docbgn
+Returns character's player number. Player 1 side uses odd numbers (1, 3, 5, 7), player 2 side even numbers (2, 4, 6, 8). Stage [AttachedChar](Stage-features/#info_attachedchar) uses number outside maximum player range (9).
+docend
+
+trigger	PrevAnim	ikgo
+fmt	PrevAnim
+docbgn
+Returns the number of the anim that the player was last in.
+docend
+
+trigger	PrevMoveType	ikgo
+fmt	PrevMoveType
+docbgn
+Returns the MoveType that the player was last in.
+docend
+
+trigger	PrevStateType	ikgo
+fmt	PrevStateType
+docbgn
+Returns the StateType that the player was last in.
+docend
+
+trigger	ProjVar	ikgo
+fmt	ProjVar($id, $index, $param)
+docbgn
+Returns the specified projectile parameter. Use -1 for ID to iterate over all projectiles.
+docend
+
+trigger	Rad	ikgo
+fmt	Rad($exp)
+docbgn
+Converts an argument value from degree to radians.
+docend
+
+trigger	RandomRange	ikgo
+fmt	RandomRange($lower,$upper)
+docbgn
+Generates pseudo-random numbers uniformly distributed between given range (both bounds inclusive). Its functionality depricates the `VarRandom` state controller.
+docend
+
+trigger	RatioLevel	ikgo
+fmt	RatioLevel
+docbgn
+Returns the character's ratio level: from 1 to 4, if the level is set, otherwise it returns 0.
+docend
+
+trigger	ReceivedDamage	ikgo
+fmt	ReceivedDamage
+docbgn
+Returns the total damage dealt by the opposite team to this character, in the currently ongoing combo. This value is valid as long as the opposite team combo count stays above 0, otherwise it returns 0 too.
+docend
+
+trigger	ReceivedHits	ikgo
+fmt	ReceivedHits
+docbgn
+Returns the total number of hits done by the opposite team to this character, in the currently ongoing combo. Unlike GetHitVar(hitcount), it takes into account all hits, including those applied by HitAdd. This value is valid as long as the opposite team combo count stays above 0, otherwise it returns 0 too.
+docend
+
+trigger	RedLife	ikgo
+fmt	RedLife
+docbgn
+Returns the amount of [red life](Miscellaneous-Info/#redlife) the player has.
+docend
+
+trigger	ReversalDefAttr	ikgo
+fmt	ReversalDefAttr = $value1, $value2
+docbgn
+Checks the attribute parameter of the player's currently-active ReversalDef. If the player does not currently have an active ReversalDef, then no parameters will match. Can be used for AI to detect a counter or to code something to happen if it exists.
+Note: ReversalDefAttr != value1, value2 is logically equivalent to !(ReversalDefAttr= value1, value2).
+docend
+
+trigger	Round	ikgo
+fmt	Round($val,$precision)
+docbgn
+Returns the rounded value of `val` to specified `precision` (number of digits after the decimal point). `precision` can also be negative or zero.
+docend
+
+trigger	RoundType	ikgo
+fmt	RoundType
+docbgn
+Returns 3 during final round (the match will be over regardless of which team win), 2 if the match will be over if the opposite team win, or 1 if the match will be over if it's won by this team. Otherwise it returns 0.
+docend
+
+trigger	RunOrder	ikgo
+fmt	RunOrder
+docbgn
+At the start of each frame, players are sorted into a list for code processing based on their current actions (see [character processing order](Miscellaneous-info#character-processing-order)). `RunOrder` returns their position in this list as an integer.
+docend
+
+trigger	Scale	ikgo
+fmt	Scale $argument
+docbgn
+Returns the value of the player's drawing scale. `Scale X` and `Scale Y` refer to the scale applied by `AngleDraw`. `Scale Z` refers to the rescaling that affects the player when moving in the Z space.
+docend
+
+trigger	Score	ikgo
+fmt	Score
+docbgn
+Returns the score points gained in this round by all team members.
+docend
+
+trigger	ScoreTotal	ikgo
+fmt	ScoreTotal
+docbgn
+Returns the total score points value. Takes into account all team members, previous rounds and previous matches since the start of this game mode.
+docend
+
+trigger	SelfCommand	ikgo
+fmt	SelfCommand
+docbgn
+[TODO]
+docend
+
+trigger	SelfStatenoExist	ikgo
+fmt	SelfStatenoExist($exprn)
+docbgn
+Checks for the existence of a state only within P1's state numbers, even when P1 is custom stated by a hit. Returns 1 if there is a statedef with the specified number. Otherwise it returns 0. Use the statedef number you want to recognize in parentheses.
+docend
+
+trigger	Sign	ikgo
+fmt	Sign($exp)
+docbgn
+Returns the sign of a real number. If value < 0 return -1. If value 0 return 0. if value > 0 return 1.
+docend
+
+trigger	SprPriority	ikgo
+fmt	SprPriority
+docbgn
+Returns the player's/helper's current SprPriority value.
+docend
+
+trigger	StageBackEdgeDist	ikgo
+fmt	StageBackEdgeDist
+docbgn
+Returns the distance to the stage edge (corner) behind the player.
+docend
+
+trigger	StageConst	ikgo
+fmt	StageConst($param_name)
+docbgn
+Returns the value of one of the stage's constants. Stage constant variables can be set under stage's DEF [[Constants]](Stage-features/#constants) section.
+docend
+
+trigger	StageFrontEdgeDist	ikgo
+fmt	StageFrontEdgeDist
+docbgn
+Returns the distance to the stage edge (corner) in front of the player.
+docend
+
+trigger	StageTime	ikgo
+fmt	StageTime
+docbgn
+Returns the stage's internal time, or the amount of ticks since the last stage reset. The value returned by this trigger corresponds directly to the amount of times stage backgrounds have been updated (taking into account `pausebg`, `resetbg`, etc), allowing one to for instance reliably synchronize [attachedchar](Stage-features/#info_attachedchar) actions to what's currently displayed by the stage.
+docend
+
+trigger	Standby	ikgo
+fmt	Standby
+docbgn
+Returns 1 if character is under standby effect (assigned by [TagOut](State-controllers-(new)/#new_tagout) sctrl).
+docend
+
+trigger	TeamLeader	ikgo
+fmt	TeamLeader
+docbgn
+Returns [playerno](Triggers-(new)/#playerno) of the character that is considered a team leader. In modes where only one player is controlled in particular round (*single*, *turns* and *ratio*) it will be either 1 or 2, depending on team side. In *simul* and *tag* modes, team leader is the first party member (again 1 or 2) by default, but who is considered a leader can be also dynamically adjusted via optional [TagIn](State-controllers-(new)/#new_tagin) sctrl *leader* parameter.
+Manually swapping leader changes lifebar elements assignment - leader always uses P1 (or P2, depending on team side) lifebar elements, remaining players positions are moved accordingly, in ascending players order.
+docend
+
+trigger	TeamSize	ikgo
+fmt	TeamSize
+docbgn
+Returns character's team size (for *turns* mode it returns information that was previously not obtainable, for other team modes the returned value is equivalent to using `NumPartner + 1`)
+docend
+
+trigger	TimeElapsed	ikgo
+fmt	TimeElapsed
+docbgn
+Returns the amount of clock ticks since the battle began (0 if time is disabled). Value returned by this trigger corresponds to lifebar timer (only ticks during RoundState = 2)
+docend
+
+trigger	TimeRemaining	ikgo
+fmt	TimeRemaining
+docbgn
+Returns the amount of clock ticks until time over (-1 if time is disabled). Value returned by this trigger corresponds to lifebar timer (only ticks during RoundState = 2)
+docend
+
+trigger	TimeTotal	ikgo
+fmt	TimeTotal
+docbgn
+Returns the total number of clock ticks that have elapsed so far. Takes into account previous rounds and matches since the start of this game mode.
+docend
+
+trigger	TopBoundDist ikgo
+fmt	TopBoundDist
+docbgn
+TopBoundDist gives the distance between the player's z-axis and the TopBound value of the stage.
+docend
+
+trigger	WinHyper	ikgo
+fmt	WinHyper
+docbgn
+Returns true if the player (or the player's team, in team mode) has won the round with the finishing blow being a hyper attack.
+docend
+
+trigger	WinSpecial	ikgo
+fmt	WinSpecial
+docbgn
+Returns true if the player (or the player's team, in team mode) has won the round with the finishing blow being a special attack.
+docend
+
